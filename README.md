@@ -34,8 +34,8 @@ into Swift — the Celtic Knot rotation cost / canonical-pick logic, the
 elite compass reader (flood-fill rose detection, MSAA detection, AA
 pixel-count windows, and the binary-search / keyframe-interpolation
 calibration tables ported from `CompassReader.ts` and
-`CompassCalibrationFunction.ts`), the sliding-puzzle pre-states +
-live-recovery pattern, and the teleport spot dataset. ClueTrainer is
+`CompassCalibrationFunction.ts`), and the teleport spot dataset.
+ClueTrainer is
 © 2024 Lukas Gail and is distributed under the MIT License. The full
 licence text is reproduced in `LICENSES/THIRD_PARTY_LICENSES.md`.
 

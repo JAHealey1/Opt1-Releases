@@ -28,8 +28,6 @@ ClueTrainer's source into Swift, including:
   `Opt1/Detection/EliteCompassDetector.swift`,
   `Opt1/Detection/CompassCalibration.swift`, and
   `Opt1/Detection/UncertainAngle.swift`.
-- The pre-states + live-recovery pattern used by the sliding-puzzle tracker
-  in `Opt1/Orchestration/`.
 - The teleport spot dataset (ported from `src/data/teleport_data.ts` into
   `Opt1/Matching/Resources/teleports.json`).
 
