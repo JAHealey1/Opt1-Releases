@@ -6,6 +6,9 @@ corpus, and renders the answer as a draggable overlay above your game window.
 It also covers the Celtic Knot, sliding-puzzle, lockbox, and towers
 sub-puzzles, and overlays teleport sprites on the world map.
 
+This repository hosts the **release binaries**, the **Sparkle update feed**,
+and the **release notes**. The source code is closed.
+
 ## Free distribution
 
 - **No ads.** No banners, no interstitials.
@@ -14,11 +17,77 @@ sub-puzzles, and overlays teleport sprites on the world map.
 - **No automation.** Opt1 reads pixels from the screen and draws an overlay.
   It never moves your mouse, presses keys, or sends input to the game client.
 
-## Downloads
+## System requirements
 
-Latest builds are published as releases on this repository. The auto-update
-appcast (`appcast.xml`) is hosted alongside the binaries so the in-app
-Sparkle integration can fetch updates automatically.
+- macOS 14.0 (Sonoma) or newer
+- Apple Silicon or Intel Mac (universal binary)
+- *RuneScape* running in a window (full-screen works too — Opt1 reads any
+  visible RS window)
+
+## Install
+
+### Recommended: Homebrew
+
+```bash
+brew tap JAHealey1/opt1
+brew install --cask opt1
+```
+
+After install, Sparkle handles every subsequent update automatically — `brew
+upgrade` does not have to know about Opt1, and won't fight Sparkle.
+
+### Direct download
+
+Grab the latest `Opt1-X.Y.Z.dmg` from the [Releases page](https://github.com/JAHealey1/Opt1-Releases/releases/latest),
+double-click to mount, and drag `Opt1.app` into `/Applications`.
+
+Either path produces the same notarized, EdDSA-signed binary. Sparkle's
+in-app *Check for Updates…* menu works from both.
+
+## First launch & permissions
+
+Opt1 needs two macOS permissions before it can do anything useful:
+
+1. **Screen Recording** — used to capture pixels of the *RuneScape* window so
+   Opt1 can read clues, puzzles, and the compass. Without it, every solve
+   silently fails. Granted via *System Settings → Privacy & Security → Screen
+   & System Audio Recording → toggle Opt1 ON*.
+2. **Accessibility** — required by the global hotkey (default `⌥1`). Without
+   it, the menu bar items still work but the keyboard shortcut won't.
+   Granted via *System Settings → Privacy & Security → Accessibility →
+   toggle Opt1 ON*.
+
+Opt1 prompts for both on first launch. If you decline, you can re-prompt
+later via the menu bar item: *Opt1 → Permissions…*. macOS occasionally
+forgets these toggles after upgrades — if Opt1 stops working after a
+macOS update, re-toggle both permissions OFF and ON.
+
+## Updates
+
+Opt1 ships with [Sparkle](https://sparkle-project.org). It checks this
+repository's `appcast.xml` once a day in the background and, when it finds a
+newer version, downloads + verifies + installs it on quit. You can also
+trigger an update check manually from *Opt1 → Check for Updates…* in the
+menu bar.
+
+Updates are signed with an EdDSA key whose public half is baked into the
+shipped app. Sparkle refuses to install any DMG whose signature doesn't
+match — so even a compromised GitHub release can't push a malicious binary
+to existing installs.
+
+## Reporting issues
+
+Found a bug, a misread clue, or a puzzle Opt1 gets wrong? Please open an
+[issue](https://github.com/JAHealey1/Opt1-Releases/issues/new). Helpful
+details:
+
+- macOS version, chip family (Apple Silicon vs Intel), Opt1 version
+  (visible at *Opt1 → Settings… → About*).
+- The clue text or screenshot of the puzzle that failed.
+- What Opt1 showed vs. what the correct answer was.
+
+Source code is closed, but bug reports against the released binary are
+very welcome — they're how Opt1 gets less wrong.
 
 ## Credits & Licenses
 
