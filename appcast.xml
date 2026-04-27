@@ -2,9 +2,19 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>Opt1</title>
-    <link>https://raw.githubusercontent.com/JAHealey1/Opt1-Releases/main/appcast.xml</link>
+    <link>https://github.com/JAHealey1/Opt1-Releases/releases</link>
     <description>Most recent updates to Opt1.</description>
     <language>en</language>
+    <item>
+      <title>Version 1.0.2</title>
+      <pubDate>Mon, 27 Apr 2026 22:38:36 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://raw.githubusercontent.com/JAHealey1/Opt1-Releases/main/release-notes/1.0.2.html</sparkle:releaseNotesLink>
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
+      <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.2/Opt1-1.0.2.dmg" sparkle:edSignature="rTkB4hfx/VUSdoxfQThT6qjcoyw+je0LFfdmuryc+v54t2Ku3FKggGfYejjqCaF+Ek5utDvMkXdZGgYu7U/wAA==" length="90457002" type="application/octet-stream" />
+    </item>
     <item>
       <title>Version 1.0.1</title>
       <pubDate>Sun, 26 Apr 2026 14:30:18 +0000</pubDate>
@@ -13,6 +23,7 @@
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>https://raw.githubusercontent.com/JAHealey1/Opt1-Releases/main/release-notes/1.0.1.html</sparkle:releaseNotesLink>
       <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.1/Opt1-1.0.1.dmg" sparkle:edSignature="6uS2HBPhvz267HdAwIXqkw3iPDY/bHgiMCY19RPXLDlQMBMnUXKj75yN9rNzlWnVHojSyFmcQTRsJBRUnKmHAA==" length="90359266" type="application/octet-stream" />
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
     </item>
     <item>
       <title>Version 1.0.0</title>
@@ -22,6 +33,7 @@
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>https://raw.githubusercontent.com/JAHealey1/Opt1-Releases/main/release-notes/1.0.0.html</sparkle:releaseNotesLink>
       <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.0/Opt1-1.0.0.dmg" sparkle:edSignature="LflyM2QrIm+3OrgdR5QmfvhrhRImNj8i+Z7XakOMytZj5UEUnHHw59ysI5Gsj8CP64NAR1bxtRlwTTwwrmOBDA==" length="90286538" type="application/octet-stream" />
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
     </item>
   </channel>
 </rss>
