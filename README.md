@@ -1,28 +1,14 @@
 # Opt1
 
-Opt1 is a free macOS helper for *RuneScape* clue scrolls. Drop a clue scroll
+Opt1 is a free macOS helper for *RuneScape 3* clue scrolls. Open a clue scroll
 on screen, hit the hotkey, and Opt1 reads it, matches it against the wiki
 corpus, and renders the answer as a draggable overlay above your game window.
-It also covers the Celtic Knot, sliding-puzzle, lockbox, and towers
-sub-puzzles, and overlays teleport sprites on the world map.
-
-This repository hosts the **release binaries**, the **Sparkle update feed**,
-and the **release notes**. The source code is closed.
-
-## Free distribution
-
-- **No ads.** No banners, no interstitials.
-- **No monetisation.** No paid tier, no donations-to-unlock, no in-app
-  purchases, no telemetry sold to third parties.
-- **No automation.** Opt1 reads pixels from the screen and draws an overlay.
-  It never moves your mouse, presses keys, or sends input to the game client.
+It also solves Celtic Knots, Slide Puzzles, lockbox's, and towers puzzles.
 
 ## System requirements
 
 - macOS 14.0 (Sonoma) or newer
-- Apple Silicon or Intel Mac (universal binary)
-- *RuneScape* running in a window (full-screen works too — Opt1 reads any
-  visible RS window)
+- Apple Silicon or Intel Mac (universal binary) (untested on Intel but should work)
 
 ## Install
 
@@ -33,22 +19,16 @@ brew tap JAHealey1/opt1
 brew install --cask opt1
 ```
 
-After install, Sparkle handles every subsequent update automatically — `brew
-upgrade` does not have to know about Opt1, and won't fight Sparkle.
-
 ### Direct download
 
-Grab the latest `Opt1-X.Y.Z.dmg` from the [Releases page](https://github.com/JAHealey1/Opt1-Releases/releases/latest),
-double-click to mount, and drag `Opt1.app` into `/Applications`.
-
-Either path produces the same notarized, EdDSA-signed binary. Sparkle's
-in-app *Check for Updates…* menu works from both.
+Latest release: [Download](https://github.com/JAHealey1/Opt1-Releases/releases/latest)
+Open the .dmg, and drag `Opt1.app` into `/Applications`.
 
 ## First launch & permissions
 
 Opt1 needs two macOS permissions before it can do anything useful:
 
-1. **Screen Recording** — used to capture pixels of the *RuneScape* window so
+1. **Screen Recording** — used to capture pixels of the *RuneScape 3* window so
    Opt1 can read clues, puzzles, and the compass. Without it, every solve
    silently fails. Granted via *System Settings → Privacy & Security → Screen
    & System Audio Recording → toggle Opt1 ON*.
@@ -87,7 +67,7 @@ details:
 - What Opt1 showed vs. what the correct answer was.
 
 Source code is closed, but bug reports against the released binary are
-very welcome — they're how Opt1 gets less wrong.
+very welcome — they're how Opt1 improves!
 
 ## Credits & Licenses
 
