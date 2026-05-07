@@ -1,10 +1,61 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>Opt1</title>
     <link>https://github.com/JAHealey1/Opt1-Releases/releases</link>
     <description>Most recent updates to Opt1.</description>
     <language>en</language>
+    <item>
+      <title>Version 1.0.3</title>
+      <pubDate>Thu, 07 May 2026 13:38:41 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>1.0.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Opt1 1.0.3 release notes</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+           font-size: 13px; line-height: 1.5; padding: 12px; }
+    h1, h2, h3 { margin-top: 1em; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+           background: rgba(127,127,127,0.15); padding: 1px 4px;
+           border-radius: 3px; }
+    pre code { display: block; padding: 8px; }
+    ul, ol { padding-left: 1.5em; }
+    a { color: #0a84ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<h1>Opt1 1.0.3</h1>
+<h2>What's new</h2>
+<ul>
+<li>Significantly improved Celtic Knot detection and solving.</li>
+<li>Celtic knot no longer requires inversion for every puzzle.</li>
+<li>Added an additional set of auto-triangulation points for Arc compasses.</li>
+<li>Fixed lockbox and towers puzzles not detecting on larger screens.</li>
+<li>Experimental support for RS3 in game UI scaling (tell us your scale in settings!).</li>
+<li>The map in the compass window now zooms in on any calculated intersection.</li>
+<li>Signficantly improved Scan clue detection.</li>
+<li>Experimental support for scan clue pathing guidance.</li>
+<li>Your choice to 'show all spots' in the compass window is now remembered.</li>
+<li>Fixed some teleport locations showing in the wrong place.</li>
+<li>Dig spots and teleport locations now show on the Arc map.</li>
+<li>General improvements to matching of clue text.</li>
+<li>Compass window is now moveable.</li>
+<li>Scan window is now resizeable.</li>
+<li>Aligned themeing across all windows.</li>
+<li>Release notes should now display properly.</li>
+</ul>
+</body>
+</html>
+]]></description>
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
+      <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.3/Opt1-1.0.3.dmg" sparkle:edSignature="XQn+NFqoea4Z5a7iZGnMn/Dx80p4utVq7N0HDJQOwJ9a3SXHlFXC90DcxU7UoLzhVLpt5hJW73blXRNOv5y0DA==" length="86613977" type="application/octet-stream" />
+    </item>
     <item>
       <title>Version 1.0.2</title>
       <pubDate>Mon, 27 Apr 2026 22:38:36 +0000</pubDate>
