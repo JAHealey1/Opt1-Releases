@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+**If you have debug mode enabled please include your opt1.log file and any other relevant log files for your issue**
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
