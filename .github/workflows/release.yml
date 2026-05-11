@@ -1,0 +1,320 @@
+name: Release
+
+# Triggered on `git push` of a tag matching `v*`. Builds, signs, notarizes,
+# EdDSA-signs the DMG, then publishes:
+#   1. A GitHub Release on JAHealey1/Opt1 (DMG + release notes asset)
+#   2. An updated appcast.xml committed directly to this repo (Sparkle feed)
+#   3. An updated Casks/opt1.rb on JAHealey1/homebrew-opt1 (brew tap)
+#
+# A single `git tag vX.Y.Z && git push --tags` is the entire steady-state
+# release process.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+# Prevent two concurrent release runs from racing on the public repos.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, notarize, publish
+    runs-on: macos-26
+    timeout-minutes: 45
+    permissions:
+      contents: write
+
+    env:
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      DEVELOPER_ID_CERT_P12_BASE64: ${{ secrets.DEVELOPER_ID_CERT_P12_BASE64 }}
+      DEVELOPER_ID_CERT_PASSWORD: ${{ secrets.DEVELOPER_ID_CERT_PASSWORD }}
+      SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+
+    steps:
+      - name: Checkout opt1
+        uses: actions/checkout@v4
+
+      - name: Resolve version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag $TAG is not semver vMAJOR.MINOR.PATCH"
+            exit 1
+          fi
+          echo "tag=$TAG"           >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION"   >> "$GITHUB_OUTPUT"
+
+      - name: Pin Xcode 26.3
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Import Developer ID certificate into a temporary keychain
+        env:
+          KEYCHAIN_PATH: ${{ runner.temp }}/build.keychain-db
+          P12_PATH: ${{ runner.temp }}/cert.p12
+        run: |
+          KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          echo "$DEVELOPER_ID_CERT_P12_BASE64" | base64 --decode > "$P12_PATH"
+
+          # Import the .p12 (cert + private key) into the temp keychain.
+          # Note: no `-t cert` here — that flag would skip the private key.
+          security import "$P12_PATH" \
+            -P "$DEVELOPER_ID_CERT_PASSWORD" \
+            -A -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          # Allow codesign / xcodebuild to use the cert non-interactively.
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" >/dev/null
+
+          # Make the temp keychain the default search keychain for this run
+          # (alongside login.keychain so SPM can still hit caches if needed).
+          security list-keychain -d user -s "$KEYCHAIN_PATH" login.keychain-db
+          security default-keychain -s "$KEYCHAIN_PATH"
+
+          rm -f "$P12_PATH"
+
+          # Verify a usable Developer ID Application identity is now visible.
+          # `find-identity -v -p codesigning` lists only identities with a
+          # private key that are valid for code signing, so this fails fast
+          # if the .p12 was missing the key, expired, or wrong type.
+          if ! security find-identity -v -p codesigning "$KEYCHAIN_PATH" \
+                | grep -q 'Developer ID Application'; then
+            echo "::error::No 'Developer ID Application' identity with a private key found in the temporary keychain."
+            echo "::error::Check the DEVELOPER_ID_CERT_P12_BASE64 / DEVELOPER_ID_CERT_PASSWORD secrets — the .p12 must include both the certificate and its private key."
+            security find-identity -v "$KEYCHAIN_PATH" || true
+            exit 1
+          fi
+
+      - name: Build, notarize, EdDSA-sign DMG
+        run: |
+          chmod +x scripts/release.sh
+          ./scripts/release.sh "${{ steps.version.outputs.version }}"
+
+      - name: Read release metadata
+        id: metadata
+        run: |
+          META="build/dist/release-${{ steps.version.outputs.version }}.json"
+          DMG_PATH="build/dist/Opt1-${{ steps.version.outputs.version }}.dmg"
+
+          # release.sh validated tag-vs-MARKETING_VERSION already and snapshotted
+          # everything we need into the JSON before cleaning up the archive.
+          read_field() { python3 -c "import json,sys; print(json.load(open('$META'))[sys.argv[1]])" "$1"; }
+          LENGTH=$(read_field length)
+          SHA256=$(read_field sha256)
+          ED_SIG=$(read_field edSignature)
+          BUILD=$(read_field build)
+          SHORT=$(read_field shortVersion)
+
+          if [[ "$SHORT" != "${{ steps.version.outputs.version }}" ]]; then
+            echo "::error::Tag is ${{ steps.version.outputs.version }} but the built app reports $SHORT. Bump MARKETING_VERSION in pbxproj before tagging."
+            exit 1
+          fi
+
+          echo "dmg_path=$DMG_PATH"   >> "$GITHUB_OUTPUT"
+          echo "length=$LENGTH"       >> "$GITHUB_OUTPUT"
+          echo "sha256=$SHA256"       >> "$GITHUB_OUTPUT"
+          echo "ed_signature=$ED_SIG" >> "$GITHUB_OUTPUT"
+          echo "build=$BUILD"         >> "$GITHUB_OUTPUT"
+
+          echo "Version:    $SHORT"
+          echo "Build:      $BUILD"
+          echo "Length:     $LENGTH"
+          echo "SHA256:     $SHA256"
+          echo "EdDSA:      $ED_SIG"
+
+      - name: Validate release notes exist
+        id: notes
+        run: |
+          MD_PATH="release-notes/${{ steps.version.outputs.version }}.md"
+          if [[ ! -f "$MD_PATH" ]]; then
+            echo "::error::Missing $MD_PATH. Add user-facing release notes (Markdown) before tagging — see release-notes/README.md."
+            exit 1
+          fi
+          echo "md_path=$MD_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Render release notes to HTML for Sparkle
+        id: render_notes
+        run: |
+          # Modern macOS Pythons are PEP 668 "externally managed", so install
+          # the Python markdown package into an isolated venv rather than
+          # poking at the system site-packages.
+          VENV="build/.venv-release-notes"
+          python3 -m venv "$VENV"
+          "$VENV/bin/pip" install --quiet 'markdown==3.7'
+
+          # Wrap the rendered Markdown in a minimal HTML document so Sparkle's
+          # WKWebView gets sane defaults (charset, line-height) instead of
+          # unstyled raw text. We use the 'fenced_code' + 'tables' extensions
+          # for parity with how GitHub renders the same .md.
+          HTML_OUT="build/dist/release-notes-${{ steps.version.outputs.version }}.html"
+          mkdir -p "$(dirname "$HTML_OUT")"
+          MD_PATH="${{ steps.notes.outputs.md_path }}" \
+          VERSION="${{ steps.version.outputs.version }}" \
+          HTML_OUT="$HTML_OUT" \
+          "$VENV/bin/python" - <<'PY'
+          import os
+          import markdown
+
+          md_path = os.environ["MD_PATH"]
+          version = os.environ["VERSION"]
+          html_out = os.environ["HTML_OUT"]
+
+          with open(md_path, encoding="utf-8") as f:
+              body = markdown.markdown(
+                  f.read(),
+                  extensions=["fenced_code", "tables", "sane_lists"],
+                  output_format="html5",
+              )
+
+          page = f"""<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>Opt1 {version} release notes</title>
+            <style>
+              body {{ font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                     font-size: 13px; line-height: 1.5; padding: 12px; }}
+              h1, h2, h3 {{ margin-top: 1em; }}
+              code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                     background: rgba(127,127,127,0.15); padding: 1px 4px;
+                     border-radius: 3px; }}
+              pre code {{ display: block; padding: 8px; }}
+              ul, ol {{ padding-left: 1.5em; }}
+              a {{ color: #0a84ff; text-decoration: none; }}
+              a:hover {{ text-decoration: underline; }}
+            </style>
+          </head>
+          <body>
+          {body}
+          </body>
+          </html>
+          """
+
+          with open(html_out, "w", encoding="utf-8") as f:
+              f.write(page)
+          print(f"Rendered {md_path} -> {html_out}")
+          PY
+          echo "html_path=$HTML_OUT" >> "$GITHUB_OUTPUT"
+
+      - name: Remove obsolete external release-notes HTML
+        # Earlier releases shipped per-version HTML files into
+        # release-notes/X.Y.Z.html so Sparkle could fetch them.
+        # We now inline the rendered HTML directly inside <description> on
+        # each appcast item, so those files are unreferenced. Sweep them out
+        # in the same commit as the appcast update so the repo doesn't keep
+        # accumulating dead artefacts.
+        run: |
+          if [[ -d release-notes ]]; then
+            find release-notes -type f -name '*.html' -delete
+            rmdir release-notes 2>/dev/null || true
+          fi
+
+      - name: Update appcast.xml
+        run: |
+          python3 scripts/update_appcast.py "${{ steps.version.outputs.version }}" \
+            --build      "${{ steps.metadata.outputs.build }}" \
+            --length     "${{ steps.metadata.outputs.length }}" \
+            --signature  "${{ steps.metadata.outputs.ed_signature }}" \
+            --notes-html "${{ steps.render_notes.outputs.html_path }}" \
+            --appcast    appcast.xml
+
+      - name: Commit + push appcast
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name  "Opt1 release bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add appcast.xml
+          if git diff --staged --quiet; then
+            echo "No appcast changes to commit (re-run on same version?)."
+          else
+            git commit -m "Release v${{ steps.version.outputs.version }}"
+            git push origin main
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DMG_PATH: ${{ steps.metadata.outputs.dmg_path }}
+          MD_PATH: ${{ steps.notes.outputs.md_path }}
+        run: |
+          # gh ships pre-installed on macos-26 runners.
+          gh release view "v${{ steps.version.outputs.version }}" \
+            --repo JAHealey1/Opt1 >/dev/null 2>&1 \
+            && RELEASE_EXISTS=1 || RELEASE_EXISTS=0
+
+          if [[ "$RELEASE_EXISTS" == "1" ]]; then
+            # Re-uploading the DMG and refreshing notes if someone re-ran the
+            # workflow against an existing tag (e.g. a CI fix that needs the
+            # same v1.0.0 to be republished).
+            gh release upload "v${{ steps.version.outputs.version }}" "$DMG_PATH" \
+              --repo JAHealey1/Opt1 --clobber
+            gh release edit "v${{ steps.version.outputs.version }}" \
+              --repo JAHealey1/Opt1 \
+              --notes-file "$MD_PATH"
+          else
+            gh release create "v${{ steps.version.outputs.version }}" "$DMG_PATH" \
+              --repo JAHealey1/Opt1 \
+              --title "Opt1 ${{ steps.version.outputs.version }}" \
+              --notes-file "$MD_PATH"
+          fi
+
+      - name: Clone homebrew-opt1
+        env:
+          GH_TOKEN: ${{ secrets.RELEASES_REPO_PAT }}
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/JAHealey1/homebrew-opt1.git public/homebrew-opt1
+          cd public/homebrew-opt1
+          git config user.name  "Opt1 release bot"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Render and push Casks/opt1.rb
+        run: |
+          mkdir -p public/homebrew-opt1/Casks
+          sed \
+            -e "s|__VERSION__|${{ steps.version.outputs.version }}|g" \
+            -e "s|__SHA256__|${{ steps.metadata.outputs.sha256 }}|g" \
+            scripts/Cask.opt1.rb.template \
+            > public/homebrew-opt1/Casks/opt1.rb
+
+          cd public/homebrew-opt1
+          git add Casks/opt1.rb
+          if git diff --staged --quiet; then
+            echo "Cask file unchanged (re-run on same version?)."
+          else
+            git commit -m "opt1 ${{ steps.version.outputs.version }}"
+            git push origin main
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: opt1-${{ steps.version.outputs.version }}
+          path: |
+            build/dist/Opt1-${{ steps.version.outputs.version }}.dmg
+            build/dist/release-${{ steps.version.outputs.version }}.json
+            build/dist/spctl-${{ steps.version.outputs.version }}.log
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Cleanup keychain
+        if: always()
+        env:
+          KEYCHAIN_PATH: ${{ runner.temp }}/build.keychain-db
+        run: |
+          security delete-keychain "$KEYCHAIN_PATH" 2>/dev/null || true

@@ -1,1 +1,85 @@
+# ---------- macOS ----------
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# ---------- Xcode ----------
+# Build output
+build/
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Per-user Xcode state (schemes, breakpoints, window layout)
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Obj-C / Swift build intermediates
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.moved-aside
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+# Keep Package.resolved committed for apps (reproducible builds).
+# Uncomment the next line only if this repo is a reusable library.
+# Package.resolved
+
+# CocoaPods / Carthage / Accio (only if you use them)
+Pods/
+Carthage/Build/
+Dependencies/
+.accio/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# ---------- Environment / secrets ----------
+.env
+.env.*
+!.env.example
+
+# ---------- Editors ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---------- Cursor ----------
+.cursor/cache/
+/.cluetrainer-ref
+
+# ---------- Private scripts (live in Opt1-Scripts repo) ----------
+Opt1/Scripts/
+
+# ---------- ML training data (live in Opt1-Scripts repo) ----------
+Opt1/Matching/Resources/ReferencePuzzleImages/
+Opt1/Matching/Resources/ReferenceLockboxImages/

@@ -1,0 +1,32 @@
+RuneScape Wiki world-map tiles
+==============================
+
+The PNG tiles in this folder are sourced from the RuneScape Wiki
+(https://runescape.wiki) and are made available under the Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0) licence.
+
+  Full licence text: https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode
+  Summary:           https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Attribution
+-----------
+Tiles are © RuneScape Wiki contributors. The underlying in-game art is
+© Jagex Ltd. and is referenced by Opt1 in the same fan-tool posture taken by
+RuneLite, Alt1, and ClueTrainer.
+
+Compliance summary
+------------------
+  BY  (attribution)    — credited here, in Opt1/THIRD_PARTY_LICENSES.md, and
+                         in the in-app "Credits & Licenses" screen.
+  NC  (non-commercial) — Opt1 is free, ad-free, and not monetised.
+  SA  (share-alike)    — tiles are shipped unmodified in this folder under
+                         this licence. Opt1's Swift code is not a derivative
+                         of the tiles; the share-alike clause does not
+                         propagate to the surrounding source code under the
+                         "collective work" allowance.
+
+Removing or modifying these files
+---------------------------------
+If you are a rights holder (RuneScape Wiki contributor or Jagex Ltd.) and
+would like Opt1 to remove or change a specific tile, please open an issue on
+the public releases repository: https://github.com/jacobhealey/Opt1-Releases

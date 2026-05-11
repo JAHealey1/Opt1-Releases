@@ -1,0 +1,94 @@
+[
+  {
+    "key": "adventurer",
+    "displayName": "Adventurer"
+  },
+  {
+    "key": "archers",
+    "displayName": "Archers"
+  },
+  {
+    "key": "araxxor",
+    "displayName": "Araxxor"
+  },
+  {
+    "key": "bridge",
+    "displayName": "Bridge"
+  },
+  {
+    "key": "castle",
+    "displayName": "Castle"
+  },
+  {
+    "key": "clan_citadel",
+    "displayName": "Clan Citadel"
+  },
+  {
+    "key": "drakan",
+    "displayName": "Drakan Bloodveld"
+  },
+  {
+    "key": "elves",
+    "displayName": "Elves"
+  },
+  {
+    "key": "gregorovic",
+    "displayName": "Gregorovic"
+  },
+  {
+    "key": "helwyr",
+    "displayName": "Helwyr"
+  },
+  {
+    "key": "ice_strykewyrm",
+    "displayName": "Ice Strykewyrm"
+  },
+  {
+    "key": "menaphos",
+    "displayName": "Menaphos Pharaoh"
+  },
+  {
+    "key": "nomad",
+    "displayName": "Nomad"
+  },
+  {
+    "key": "nymora",
+    "displayName": "Nymora"
+  },
+  {
+    "key": "sword_of_edicts",
+    "displayName": "Sword of Edicts"
+  },
+  {
+    "key": "tree",
+    "displayName": "Tree"
+  },
+  {
+    "key": "troll",
+    "displayName": "Troll"
+  },
+  {
+    "key": "tuska",
+    "displayName": "Tuska"
+  },
+  {
+    "key": "v",
+    "displayName": "V"
+  },
+  {
+    "key": "vanstrom",
+    "displayName": "Vanstrom Klause"
+  },
+  {
+    "key": "werewolf",
+    "displayName": "Werewolf"
+  },
+  {
+    "key": "wizard",
+    "displayName": "Wizard"
+  },
+  {
+    "key": "wyvern",
+    "displayName": "Wyvern"
+  }
+]

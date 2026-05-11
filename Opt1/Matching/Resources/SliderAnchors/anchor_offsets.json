@@ -1,0 +1,197 @@
+{
+  "scale_100" : {
+    "needleSize" : [
+      21,
+      21
+    ],
+    "puzzleSize" : [
+      273,
+      273
+    ],
+    "tlOffsetFromX" : [
+      -297,
+      15
+    ],
+    "uiScale" : 100
+  },
+  "scale_110" : {
+    "needleSize" : [
+      25,
+      28
+    ],
+    "puzzleSize" : [
+      300,
+      300
+    ],
+    "tlOffsetFromX" : [
+      -327,
+      17
+    ],
+    "uiScale" : 110
+  },
+  "scale_120" : {
+    "needleSize" : [
+      31,
+      28
+    ],
+    "puzzleSize" : [
+      328,
+      328
+    ],
+    "tlOffsetFromX" : [
+      -356,
+      18
+    ],
+    "uiScale" : 120
+  },
+  "scale_135" : {
+    "needleSize" : [
+      31,
+      34
+    ],
+    "puzzleSize" : [
+      369,
+      369
+    ],
+    "tlOffsetFromX" : [
+      -401,
+      20
+    ],
+    "uiScale" : 135
+  },
+  "scale_150" : {
+    "needleSize" : [
+      34,
+      36
+    ],
+    "puzzleSize" : [
+      410,
+      410
+    ],
+    "tlOffsetFromX" : [
+      -446,
+      23
+    ],
+    "uiScale" : 150
+  },
+  "scale_175" : {
+    "needleSize" : [
+      43,
+      43
+    ],
+    "puzzleSize" : [
+      478,
+      478
+    ],
+    "tlOffsetFromX" : [
+      -520,
+      26
+    ],
+    "uiScale" : 175
+  },
+  "scale_200" : {
+    "needleSize" : [
+      46,
+      49
+    ],
+    "puzzleSize" : [
+      546,
+      546
+    ],
+    "tlOffsetFromX" : [
+      -594,
+      30
+    ],
+    "uiScale" : 200
+  },
+  "scale_225" : {
+    "needleSize" : [
+      52,
+      52
+    ],
+    "puzzleSize" : [
+      614,
+      614
+    ],
+    "tlOffsetFromX" : [
+      -668,
+      34
+    ],
+    "uiScale" : 225
+  },
+  "scale_250" : {
+    "needleSize" : [
+      55,
+      57
+    ],
+    "puzzleSize" : [
+      683,
+      683
+    ],
+    "tlOffsetFromX" : [
+      -743,
+      38
+    ],
+    "uiScale" : 250
+  },
+  "scale_275" : {
+    "needleSize" : [
+      58,
+      60
+    ],
+    "puzzleSize" : [
+      751,
+      751
+    ],
+    "tlOffsetFromX" : [
+      -817,
+      41
+    ],
+    "uiScale" : 275
+  },
+  "scale_70" : {
+    "needleSize" : [
+      16,
+      18
+    ],
+    "puzzleSize" : [
+      191,
+      191
+    ],
+    "tlOffsetFromX" : [
+      -208,
+      11
+    ],
+    "uiScale" : 70
+  },
+  "scale_80" : {
+    "needleSize" : [
+      19,
+      21
+    ],
+    "puzzleSize" : [
+      218,
+      218
+    ],
+    "tlOffsetFromX" : [
+      -238,
+      12
+    ],
+    "uiScale" : 80
+  },
+  "scale_90" : {
+    "needleSize" : [
+      20,
+      18
+    ],
+    "puzzleSize" : [
+      246,
+      246
+    ],
+    "tlOffsetFromX" : [
+      -267,
+      14
+    ],
+    "uiScale" : 90
+  }
+}

@@ -1,0 +1,994 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A300000000000000000000106 /* ParchmentLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FC /* ParchmentLocator.swift */; };
+		A300000000000000000000107 /* ScanPulseFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FD /* ScanPulseFilter.swift */; };
+		A300000000000000000000108 /* ScanFilterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FE /* ScanFilterState.swift */; };
+		A300000000000000000000109 /* ScanOptimiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FF /* ScanOptimiser.swift */; };
+		A300000000000000000000A0 /* Opt1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* Opt1App.swift */; };
+		A300000000000000000000A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* AppDelegate.swift */; };
+		A300000000000000000000A2 /* ScreenCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* ScreenCaptureManager.swift */; };
+		A300000000000000000000A3 /* WindowFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A0 /* WindowFinder.swift */; };
+		A300000000000000000000A4 /* ClueScrollDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A1 /* ClueScrollDetector.swift */; };
+		A300000000000000000000A5 /* ImagePreprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A2 /* ImagePreprocessor.swift */; };
+		A300000000000000000000A6 /* ClueTextReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A3 /* ClueTextReader.swift */; };
+		A300000000000000000000A9 /* OverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A6 /* OverlayWindowController.swift */; };
+		A300000000000000000000AA /* SolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A7 /* SolutionView.swift */; };
+		A300000000000000000000AB /* GlobalHotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000A8 /* GlobalHotkeyManager.swift */; };
+		A300000000000000000000AD /* MapClueMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000AD /* MapClueMatcher.swift */; };
+		A300000000000000000000AF /* LockboxDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000AF /* LockboxDetector.swift */; };
+		A300000000000000000000B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* Assets.xcassets */; };
+		A300000000000000000000B4 /* TowersDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B4 /* TowersDetector.swift */; };
+		A300000000000000000000B5 /* MapImages in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B5 /* MapImages */; };
+		A300000000000000000000B8 /* PuzzleBoxOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B8 /* PuzzleBoxOverlayController.swift */; };
+		A300000000000000000000B9 /* PuzzleImages in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B9 /* PuzzleImages */; };
+		A300000000000000000000C0 /* ScreenCaptureKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B0 /* ScreenCaptureKit.framework */; };
+		A300000000000000000000C1 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B1 /* Vision.framework */; };
+		A300000000000000000000C2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B2 /* Accelerate.framework */; };
+		A300000000000000000000C3 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B3 /* VideoToolbox.framework */; };
+		A300000000000000000000C4 /* PuzzleSnipOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000BB /* PuzzleSnipOverlayController.swift */; };
+		A300000000000000000000C5 /* GridLocalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000C5 /* GridLocalizer.swift */; };
+		A300000000000000000000C6 /* PuzzleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000C6 /* PuzzleIdentifier.swift */; };
+		A300000000000000000000C7 /* TileMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000C7 /* TileMatcher.swift */; };
+		A300000000000000000000C9 /* PuzzleDetectionPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000C9 /* PuzzleDetectionPipeline.swift */; };
+		A300000000000000000000CA /* PuzzleBoxDetectorV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000CA /* PuzzleBoxDetectorV2.swift */; };
+		A300000000000000000000CC /* PuzzleEmbeddingExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000CC /* PuzzleEmbeddingExtractor.swift */; };
+		A300000000000000000000CD /* PuzzleCollectionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D3 /* PuzzleCollectionSession.swift */; };
+		A300000000000000000000CE /* DatasetWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D4 /* DatasetWriter.swift */; };
+		A300000000000000000000CF /* PuzzleDataCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D5 /* PuzzleDataCollectionController.swift */; };
+		A300000000000000000000D0 /* CelticKnotDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D7 /* CelticKnotDetector.swift */; };
+		A300000000000000000000D1 /* CelticKnotDataCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D8 /* CelticKnotDataCollectionController.swift */; };
+		A300000000000000000000D2 /* EliteCompassDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000D9 /* EliteCompassDetector.swift */; };
+		A300000000000000000000D3 /* CompassTriangulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000DA /* CompassTriangulation.swift */; };
+		A300000000000000000000D4 /* ClueOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000DB /* ClueOrchestrator.swift */; };
+		A300000000000000000000D5 /* OverlayPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000DC /* OverlayPresenter.swift */; };
+		A300000000000000000000D6 /* PipelineStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000DD /* PipelineStatusBanner.swift */; };
+		A300000000000000000000D9 /* CelticKnotSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000E1 /* CelticKnotSolver.swift */; };
+		A300000000000000000000DA /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000E2 /* AppSettings.swift */; };
+		A300000000000000000000DB /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000E3 /* DebugLogger.swift */; };
+		A300000000000000000000DC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000E4 /* SettingsView.swift */; };
+		A300000000000000000000DD /* MapTiles in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000E5 /* MapTiles */; };
+		A300000000000000000000F0 /* OverlayPanelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F0 /* OverlayPanelFactory.swift */; };
+		A300000000000000000000F2 /* PuzzleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F2 /* PuzzleDetector.swift */; };
+		A300000000000000000000F5 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F5 /* CreditsView.swift */; };
+		A300000000000000000000F6 /* TeleportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F6 /* TeleportData.swift */; };
+		A300000000000000000000F7 /* TeleportLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F7 /* TeleportLayer.swift */; };
+		A300000000000000000000F8 /* teleports.json in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F8 /* teleports.json */; };
+		A300000000000000000000F9 /* TeleportIcons in Resources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000F9 /* TeleportIcons */; };
+		A300000000000000000000FA /* CompassDigSpots.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FA /* CompassDigSpots.swift */; };
+		A300000000000000000000FB /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000FB /* CalibrationView.swift */; };
+		A30000000000000000000100 /* PermissionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000100 /* PermissionsState.swift */; };
+		A30000000000000000000101 /* OnboardingPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000101 /* OnboardingPermissionsView.swift */; };
+		A30000000000000000000102 /* SliderAnchors in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000102 /* SliderAnchors */; };
+		A30000000000000000000103 /* SliderAnchorCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000103 /* SliderAnchorCollectionController.swift */; };
+		A30000000000000000000104 /* SliderInterfaceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000104 /* SliderInterfaceLocator.swift */; };
+		A30000000000000000000105 /* PuzzleModalLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000105 /* PuzzleModalLocator.swift */; };
+		A3000000000000000000010A /* KeyRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010A /* KeyRecorderView.swift */; };
+		A30000000000000000000110 /* NXTModalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000110 /* NXTModalHelpers.swift */; };
+		B300000000000000000000A4 /* CelticKnotSolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A4 /* CelticKnotSolverTests.swift */; };
+		B300000000000000000000A8 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A8 /* Mocks.swift */; };
+		B300000000000000000000A9 /* ClueOrchestratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A9 /* ClueOrchestratorTests.swift */; };
+		B300000000000000000000AA /* OrchestratorDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AA /* OrchestratorDependencies.swift */; };
+		B300000000000000000000AB /* SnipCoordinateMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AB /* SnipCoordinateMapper.swift */; };
+		B300000000000000000000AC /* CaptureErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AC /* CaptureErrorPresenter.swift */; };
+		B300000000000000000000AD /* ClueScrollPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AD /* ClueScrollPipeline.swift */; };
+		B300000000000000000000AE /* SolveFlowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AE /* SolveFlowState.swift */; };
+		B300000000000000000000AF /* PuzzleBoxCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AF /* PuzzleBoxCoordinator.swift */; };
+		B300000000000000000000B0 /* CelticKnotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B0 /* CelticKnotCoordinator.swift */; };
+		B300000000000000000000B1 /* AppSessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B1 /* AppSessionState.swift */; };
+		B300000000000000000000B3 /* CelticKnotRuneClassification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B3 /* CelticKnotRuneClassification.swift */; };
+		B300000000000000000000B4 /* CelticKnotDebugRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */; };
+		B300000000000000000000B5 /* OverlayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B5 /* OverlayTheme.swift */; };
+		B300000000000000000000B6 /* MapTileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B6 /* MapTileCache.swift */; };
+		B300000000000000000000B7 /* ScrollZoomModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B7 /* ScrollZoomModifier.swift */; };
+		B300000000000000000000B8 /* RSWorldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B8 /* RSWorldMapView.swift */; };
+		B300000000000000000000B9 /* EliteCompassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B9 /* EliteCompassView.swift */; };
+		B300000000000000000000BA /* ScanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000BA /* ScanListView.swift */; };
+		B300000000000000000000BB /* SolutionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000BB /* SolutionCardView.swift */; };
+		B300000000000000000000BC /* PuzzleSolutionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000BC /* PuzzleSolutionViews.swift */; };
+		B300000000000000000000BD /* DetectionHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000BD /* DetectionHelpers.swift */; };
+		F21F8EAE2F944160005662AA /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = F21F8EAD2F944160005662AA /* AppIcon.icon */; };
+		F21F993F2F993BAB005662AA /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = F21F993E2F993BAB005662AA /* Sparkle */; };
+		P300000000000000000000A0 /* DetectionConfiguration+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = P200000000000000000000A0 /* DetectionConfiguration+App.swift */; };
+		P300000000000000000000B0 /* Opt1Core in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A0 /* Opt1Core */; };
+		P300000000000000000000B1 /* Opt1Solvers in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A1 /* Opt1Solvers */; };
+		P300000000000000000000B2 /* Opt1Detection in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A2 /* Opt1Detection */; };
+		P300000000000000000000B3 /* Opt1Matching in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A3 /* Opt1Matching */; };
+		P300000000000000000000B4 /* Opt1CelticKnot in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A4 /* Opt1CelticKnot */; };
+		P300000000000000000000B5 /* Opt1CelticKnot in Frameworks */ = {isa = PBXBuildFile; productRef = P400000000000000000000A4 /* Opt1CelticKnot */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B800000000000000000000A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1000000000000000000000A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6000000000000000000000A;
+			remoteInfo = Opt1;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A2000000000000000000000A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000000000000000000000B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A2000000000000000000000C /* Opt1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Opt1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2000000000000000000000D /* Opt1App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opt1App.swift; sourceTree = "<group>"; };
+		A2000000000000000000000E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* ScreenCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureManager.swift; sourceTree = "<group>"; };
+		A200000000000000000000A0 /* WindowFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowFinder.swift; sourceTree = "<group>"; };
+		A200000000000000000000A1 /* ClueScrollDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueScrollDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000A2 /* ImagePreprocessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreprocessor.swift; sourceTree = "<group>"; };
+		A200000000000000000000A3 /* ClueTextReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueTextReader.swift; sourceTree = "<group>"; };
+		A200000000000000000000A6 /* OverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowController.swift; sourceTree = "<group>"; };
+		A200000000000000000000A7 /* SolutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionView.swift; sourceTree = "<group>"; };
+		A200000000000000000000A8 /* GlobalHotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotkeyManager.swift; sourceTree = "<group>"; };
+		A200000000000000000000AA /* scrape_clues.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = scrape_clues.py; sourceTree = "<group>"; };
+		A200000000000000000000AD /* MapClueMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapClueMatcher.swift; sourceTree = "<group>"; };
+		A200000000000000000000AF /* LockboxDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000B0 /* ScreenCaptureKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenCaptureKit.framework; path = System/Library/Frameworks/ScreenCaptureKit.framework; sourceTree = SDKROOT; };
+		A200000000000000000000B1 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		A200000000000000000000B2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		A200000000000000000000B3 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		A200000000000000000000B4 /* TowersDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowersDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000B5 /* MapImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MapImages; sourceTree = "<group>"; };
+		A200000000000000000000B8 /* PuzzleBoxOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleBoxOverlayController.swift; sourceTree = "<group>"; };
+		A200000000000000000000B9 /* PuzzleImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PuzzleImages; sourceTree = "<group>"; };
+		A200000000000000000000BA /* scrape_puzzles.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = scrape_puzzles.py; sourceTree = "<group>"; };
+		A200000000000000000000BB /* PuzzleSnipOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleSnipOverlayController.swift; sourceTree = "<group>"; };
+		A200000000000000000000C5 /* GridLocalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLocalizer.swift; sourceTree = "<group>"; };
+		A200000000000000000000C6 /* PuzzleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleIdentifier.swift; sourceTree = "<group>"; };
+		A200000000000000000000C7 /* TileMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMatcher.swift; sourceTree = "<group>"; };
+		A200000000000000000000C9 /* PuzzleDetectionPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleDetectionPipeline.swift; sourceTree = "<group>"; };
+		A200000000000000000000CA /* PuzzleBoxDetectorV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleBoxDetectorV2.swift; sourceTree = "<group>"; };
+		A200000000000000000000CC /* PuzzleEmbeddingExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleEmbeddingExtractor.swift; sourceTree = "<group>"; };
+		A200000000000000000000CD /* build_puzzle_dataset_manifest.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = build_puzzle_dataset_manifest.py; sourceTree = "<group>"; };
+		A200000000000000000000CE /* evaluate_puzzle_detector.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = evaluate_puzzle_detector.py; sourceTree = "<group>"; };
+		A200000000000000000000CF /* generate_reference_embeddings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = generate_reference_embeddings.py; sourceTree = "<group>"; };
+		A200000000000000000000D0 /* puzzle_embedding_utils.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = puzzle_embedding_utils.py; sourceTree = "<group>"; };
+		A200000000000000000000D1 /* train_puzzle_classifier.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = train_puzzle_classifier.py; sourceTree = "<group>"; };
+		A200000000000000000000D2 /* puzzle_detector_training_workflow.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = puzzle_detector_training_workflow.md; sourceTree = "<group>"; };
+		A200000000000000000000D3 /* PuzzleCollectionSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleCollectionSession.swift; sourceTree = "<group>"; };
+		A200000000000000000000D4 /* DatasetWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatasetWriter.swift; sourceTree = "<group>"; };
+		A200000000000000000000D5 /* PuzzleDataCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleDataCollectionController.swift; sourceTree = "<group>"; };
+		A200000000000000000000D6 /* calibrate_ambiguity_thresholds.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = calibrate_ambiguity_thresholds.py; sourceTree = "<group>"; };
+		A200000000000000000000D7 /* CelticKnotDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000D8 /* CelticKnotDataCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotDataCollectionController.swift; sourceTree = "<group>"; };
+		A200000000000000000000D9 /* EliteCompassDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EliteCompassDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000DA /* CompassTriangulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassTriangulation.swift; sourceTree = "<group>"; };
+		A200000000000000000000DB /* ClueOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueOrchestrator.swift; sourceTree = "<group>"; };
+		A200000000000000000000DC /* OverlayPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPresenter.swift; sourceTree = "<group>"; };
+		A200000000000000000000DD /* PipelineStatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineStatusBanner.swift; sourceTree = "<group>"; };
+		A200000000000000000000E1 /* CelticKnotSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotSolver.swift; sourceTree = "<group>"; };
+		A200000000000000000000E2 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A200000000000000000000E3 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
+		A200000000000000000000E4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A200000000000000000000E5 /* MapTiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MapTiles; sourceTree = "<group>"; };
+		A200000000000000000000F0 /* OverlayPanelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPanelFactory.swift; sourceTree = "<group>"; };
+		A200000000000000000000F2 /* PuzzleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleDetector.swift; sourceTree = "<group>"; };
+		A200000000000000000000F5 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
+		A200000000000000000000F6 /* TeleportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeleportData.swift; sourceTree = "<group>"; };
+		A200000000000000000000F7 /* TeleportLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeleportLayer.swift; sourceTree = "<group>"; };
+		A200000000000000000000F8 /* teleports.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = teleports.json; sourceTree = "<group>"; };
+		A200000000000000000000F9 /* TeleportIcons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TeleportIcons; sourceTree = "<group>"; };
+		A200000000000000000000FA /* CompassDigSpots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassDigSpots.swift; sourceTree = "<group>"; };
+		A200000000000000000000FB /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
+		A200000000000000000000FC /* ParchmentLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParchmentLocator.swift; sourceTree = "<group>"; };
+		A200000000000000000000FD /* ScanPulseFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanPulseFilter.swift; sourceTree = "<group>"; };
+		A200000000000000000000FE /* ScanFilterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFilterState.swift; sourceTree = "<group>"; };
+		A200000000000000000000FF /* ScanOptimiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOptimiser.swift; sourceTree = "<group>"; };
+		A20000000000000000000100 /* PermissionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsState.swift; sourceTree = "<group>"; };
+		A20000000000000000000101 /* OnboardingPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000102 /* SliderAnchors */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SliderAnchors; sourceTree = "<group>"; };
+		A20000000000000000000103 /* SliderAnchorCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderAnchorCollectionController.swift; sourceTree = "<group>"; };
+		A20000000000000000000104 /* SliderInterfaceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderInterfaceLocator.swift; sourceTree = "<group>"; };
+		A20000000000000000000105 /* PuzzleModalLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleModalLocator.swift; sourceTree = "<group>"; };
+		A2000000000000000000010A /* KeyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderView.swift; sourceTree = "<group>"; };
+		A20000000000000000000110 /* NXTModalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NXTModalHelpers.swift; sourceTree = "<group>"; };
+		B200000000000000000000A0 /* Opt1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Opt1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B200000000000000000000A4 /* CelticKnotSolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotSolverTests.swift; sourceTree = "<group>"; };
+		B200000000000000000000A8 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		B200000000000000000000A9 /* ClueOrchestratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueOrchestratorTests.swift; sourceTree = "<group>"; };
+		B200000000000000000000AA /* OrchestratorDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrchestratorDependencies.swift; sourceTree = "<group>"; };
+		B200000000000000000000AB /* SnipCoordinateMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnipCoordinateMapper.swift; sourceTree = "<group>"; };
+		B200000000000000000000AC /* CaptureErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureErrorPresenter.swift; sourceTree = "<group>"; };
+		B200000000000000000000AD /* ClueScrollPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueScrollPipeline.swift; sourceTree = "<group>"; };
+		B200000000000000000000AE /* SolveFlowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveFlowState.swift; sourceTree = "<group>"; };
+		B200000000000000000000AF /* PuzzleBoxCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleBoxCoordinator.swift; sourceTree = "<group>"; };
+		B200000000000000000000B0 /* CelticKnotCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotCoordinator.swift; sourceTree = "<group>"; };
+		B200000000000000000000B1 /* AppSessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSessionState.swift; sourceTree = "<group>"; };
+		B200000000000000000000B3 /* CelticKnotRuneClassification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotRuneClassification.swift; sourceTree = "<group>"; };
+		B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotDebugRenderer.swift; sourceTree = "<group>"; };
+		B200000000000000000000B5 /* OverlayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayTheme.swift; sourceTree = "<group>"; };
+		B200000000000000000000B6 /* MapTileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTileCache.swift; sourceTree = "<group>"; };
+		B200000000000000000000B7 /* ScrollZoomModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollZoomModifier.swift; sourceTree = "<group>"; };
+		B200000000000000000000B8 /* RSWorldMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSWorldMapView.swift; sourceTree = "<group>"; };
+		B200000000000000000000B9 /* EliteCompassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EliteCompassView.swift; sourceTree = "<group>"; };
+		B200000000000000000000BA /* ScanListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanListView.swift; sourceTree = "<group>"; };
+		B200000000000000000000BB /* SolutionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionCardView.swift; sourceTree = "<group>"; };
+		B200000000000000000000BC /* PuzzleSolutionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleSolutionViews.swift; sourceTree = "<group>"; };
+		B200000000000000000000BD /* DetectionHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionHelpers.swift; sourceTree = "<group>"; };
+		F21F8C412F92B7B2005662AA /* Opt1.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Opt1.xctestplan; sourceTree = "<group>"; };
+		F21F8EAD2F944160005662AA /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		F300000000000000000000A0 /* Opt1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Opt1.entitlements; sourceTree = "<group>"; };
+		P200000000000000000000A0 /* DetectionConfiguration+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetectionConfiguration+App.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F2E5A8FF2F77433900065394 /* ReferencePuzzleImages */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ReferencePuzzleImages; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A400000000000000000000A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				P300000000000000000000B0 /* Opt1Core in Frameworks */,
+				P300000000000000000000B1 /* Opt1Solvers in Frameworks */,
+				P300000000000000000000B2 /* Opt1Detection in Frameworks */,
+				P300000000000000000000B3 /* Opt1Matching in Frameworks */,
+				P300000000000000000000B4 /* Opt1CelticKnot in Frameworks */,
+				F21F993F2F993BAB005662AA /* Sparkle in Frameworks */,
+				A300000000000000000000C0 /* ScreenCaptureKit.framework in Frameworks */,
+				A300000000000000000000C1 /* Vision.framework in Frameworks */,
+				A300000000000000000000C2 /* Accelerate.framework in Frameworks */,
+				A300000000000000000000C3 /* VideoToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B600000000000000000000A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				P300000000000000000000B5 /* Opt1CelticKnot in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A5000000000000000000000A = {
+			isa = PBXGroup;
+			children = (
+				F21F8EAD2F944160005662AA /* AppIcon.icon */,
+				F21F8C412F92B7B2005662AA /* Opt1.xctestplan */,
+				A5000000000000000000000C /* Opt1 */,
+				B400000000000000000000A0 /* Opt1Tests */,
+				A5000000000000000000001F /* Frameworks */,
+				A5000000000000000000000B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A5000000000000000000000B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000C /* Opt1.app */,
+				B200000000000000000000A0 /* Opt1Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000000C /* Opt1 */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000D /* Opt1App.swift */,
+				A2000000000000000000000E /* AppDelegate.swift */,
+				A2000000000000000000000A /* Info.plist */,
+				F300000000000000000000A0 /* Opt1.entitlements */,
+				A2000000000000000000000B /* Assets.xcassets */,
+				A5000000000000000000000D /* Capture */,
+				A5000000000000000000000E /* Detection */,
+				A50000000000000000000022 /* Solvers */,
+				A5000000000000000000000F /* OCR */,
+				A5000000000000000000001A /* Matching */,
+				A5000000000000000000001C /* Overlay */,
+				A5000000000000000000001D /* Hotkey */,
+				A5000000000000000000001E /* Scripts */,
+				A50000000000000000000020 /* DataCollection */,
+				A50000000000000000000021 /* Orchestration */,
+				A50000000000000000000023 /* Settings */,
+			);
+			path = Opt1;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000000D /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000F /* ScreenCaptureManager.swift */,
+				A200000000000000000000A0 /* WindowFinder.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000000E /* Detection */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000A1 /* ClueScrollDetector.swift */,
+				A200000000000000000000A2 /* ImagePreprocessor.swift */,
+				A200000000000000000000AD /* MapClueMatcher.swift */,
+				A200000000000000000000AF /* LockboxDetector.swift */,
+				A200000000000000000000B4 /* TowersDetector.swift */,
+				A200000000000000000000CA /* PuzzleBoxDetectorV2.swift */,
+				A200000000000000000000C9 /* PuzzleDetectionPipeline.swift */,
+				A200000000000000000000C5 /* GridLocalizer.swift */,
+				A200000000000000000000C6 /* PuzzleIdentifier.swift */,
+				A200000000000000000000C7 /* TileMatcher.swift */,
+				A200000000000000000000CC /* PuzzleEmbeddingExtractor.swift */,
+				A200000000000000000000D7 /* CelticKnotDetector.swift */,
+				A20000000000000000000110 /* NXTModalHelpers.swift */,
+				B200000000000000000000B3 /* CelticKnotRuneClassification.swift */,
+				B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */,
+				P200000000000000000000A0 /* DetectionConfiguration+App.swift */,
+				A200000000000000000000D9 /* EliteCompassDetector.swift */,
+				A200000000000000000000FC /* ParchmentLocator.swift */,
+				A200000000000000000000FD /* ScanPulseFilter.swift */,
+				A200000000000000000000FF /* ScanOptimiser.swift */,
+				A200000000000000000000DA /* CompassTriangulation.swift */,
+				A200000000000000000000FA /* CompassDigSpots.swift */,
+				A200000000000000000000F2 /* PuzzleDetector.swift */,
+				B200000000000000000000BD /* DetectionHelpers.swift */,
+				A20000000000000000000105 /* PuzzleModalLocator.swift */,
+				A20000000000000000000104 /* SliderInterfaceLocator.swift */,
+			);
+			path = Detection;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000000F /* OCR */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000A3 /* ClueTextReader.swift */,
+			);
+			path = OCR;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001A /* Matching */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000F6 /* TeleportData.swift */,
+				A5000000000000000000001B /* Resources */,
+			);
+			path = Matching;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F2E5A8FF2F77433900065394 /* ReferencePuzzleImages */,
+				A200000000000000000000B5 /* MapImages */,
+				A200000000000000000000B9 /* PuzzleImages */,
+				A20000000000000000000102 /* SliderAnchors */,
+				A200000000000000000000E5 /* MapTiles */,
+				A200000000000000000000F8 /* teleports.json */,
+				A200000000000000000000F9 /* TeleportIcons */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001C /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000A6 /* OverlayWindowController.swift */,
+				A200000000000000000000A7 /* SolutionView.swift */,
+				B200000000000000000000B5 /* OverlayTheme.swift */,
+				B200000000000000000000BB /* SolutionCardView.swift */,
+				B200000000000000000000BC /* PuzzleSolutionViews.swift */,
+				B200000000000000000000BA /* ScanListView.swift */,
+				B200000000000000000000B9 /* EliteCompassView.swift */,
+				B200000000000000000000B8 /* RSWorldMapView.swift */,
+				A200000000000000000000F7 /* TeleportLayer.swift */,
+				B200000000000000000000B6 /* MapTileCache.swift */,
+				B200000000000000000000B7 /* ScrollZoomModifier.swift */,
+				A200000000000000000000B8 /* PuzzleBoxOverlayController.swift */,
+				A200000000000000000000BB /* PuzzleSnipOverlayController.swift */,
+				A200000000000000000000DD /* PipelineStatusBanner.swift */,
+				A200000000000000000000F0 /* OverlayPanelFactory.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001D /* Hotkey */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000A8 /* GlobalHotkeyManager.swift */,
+			);
+			path = Hotkey;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001E /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000AA /* scrape_clues.py */,
+				A200000000000000000000BA /* scrape_puzzles.py */,
+				A200000000000000000000CD /* build_puzzle_dataset_manifest.py */,
+				A200000000000000000000CE /* evaluate_puzzle_detector.py */,
+				A200000000000000000000CF /* generate_reference_embeddings.py */,
+				A200000000000000000000D0 /* puzzle_embedding_utils.py */,
+				A200000000000000000000D1 /* train_puzzle_classifier.py */,
+				A200000000000000000000D2 /* puzzle_detector_training_workflow.md */,
+				A200000000000000000000D6 /* calibrate_ambiguity_thresholds.py */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		A5000000000000000000001F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000B0 /* ScreenCaptureKit.framework */,
+				A200000000000000000000B1 /* Vision.framework */,
+				A200000000000000000000B2 /* Accelerate.framework */,
+				A200000000000000000000B3 /* VideoToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000020 /* DataCollection */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000D3 /* PuzzleCollectionSession.swift */,
+				A200000000000000000000D4 /* DatasetWriter.swift */,
+				A200000000000000000000D5 /* PuzzleDataCollectionController.swift */,
+				A200000000000000000000D8 /* CelticKnotDataCollectionController.swift */,
+				A20000000000000000000103 /* SliderAnchorCollectionController.swift */,
+			);
+			path = DataCollection;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000021 /* Orchestration */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000DB /* ClueOrchestrator.swift */,
+				A200000000000000000000DC /* OverlayPresenter.swift */,
+				A200000000000000000000FE /* ScanFilterState.swift */,
+				B200000000000000000000AA /* OrchestratorDependencies.swift */,
+				B200000000000000000000AB /* SnipCoordinateMapper.swift */,
+				B200000000000000000000AC /* CaptureErrorPresenter.swift */,
+				B200000000000000000000AD /* ClueScrollPipeline.swift */,
+				B200000000000000000000AE /* SolveFlowState.swift */,
+				B200000000000000000000AF /* PuzzleBoxCoordinator.swift */,
+				B200000000000000000000B0 /* CelticKnotCoordinator.swift */,
+				B200000000000000000000B1 /* AppSessionState.swift */,
+			);
+			path = Orchestration;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000022 /* Solvers */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000E1 /* CelticKnotSolver.swift */,
+			);
+			path = Solvers;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000023 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A200000000000000000000E2 /* AppSettings.swift */,
+				A200000000000000000000E3 /* DebugLogger.swift */,
+				A200000000000000000000E4 /* SettingsView.swift */,
+				A200000000000000000000FB /* CalibrationView.swift */,
+				A200000000000000000000F5 /* CreditsView.swift */,
+				A20000000000000000000100 /* PermissionsState.swift */,
+				A20000000000000000000101 /* OnboardingPermissionsView.swift */,
+				A2000000000000000000010A /* KeyRecorderView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		B400000000000000000000A0 /* Opt1Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B400000000000000000000A1 /* Solvers */,
+				B400000000000000000000A2 /* Matching */,
+				B400000000000000000000A3 /* Detection */,
+				B400000000000000000000A4 /* Orchestration */,
+			);
+			path = Opt1Tests;
+			sourceTree = "<group>";
+		};
+		B400000000000000000000A1 /* Solvers */ = {
+			isa = PBXGroup;
+			children = (
+				B200000000000000000000A4 /* CelticKnotSolverTests.swift */,
+			);
+			path = Solvers;
+			sourceTree = "<group>";
+		};
+		B400000000000000000000A2 /* Matching */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Matching;
+			sourceTree = "<group>";
+		};
+		B400000000000000000000A3 /* Detection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Detection;
+			sourceTree = "<group>";
+		};
+		B400000000000000000000A4 /* Orchestration */ = {
+			isa = PBXGroup;
+			children = (
+				B200000000000000000000A8 /* Mocks.swift */,
+				B200000000000000000000A9 /* ClueOrchestratorTests.swift */,
+			);
+			path = Orchestration;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A6000000000000000000000A /* Opt1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A700000000000000000000B1 /* Build configuration list for PBXNativeTarget "Opt1" */;
+			buildPhases = (
+				A400000000000000000000A0 /* Sources */,
+				A400000000000000000000A1 /* Frameworks */,
+				A400000000000000000000A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Opt1;
+			packageProductDependencies = (
+				P400000000000000000000A0 /* Opt1Core */,
+				P400000000000000000000A1 /* Opt1Solvers */,
+				P400000000000000000000A2 /* Opt1Detection */,
+				P400000000000000000000A3 /* Opt1Matching */,
+				P400000000000000000000A4 /* Opt1CelticKnot */,
+			);
+			productName = Opt1;
+			productReference = A2000000000000000000000C /* Opt1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B500000000000000000000A0 /* Opt1Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B700000000000000000000B0 /* Build configuration list for PBXNativeTarget "Opt1Tests" */;
+			buildPhases = (
+				B600000000000000000000A0 /* Sources */,
+				B600000000000000000000A1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B800000000000000000000A1 /* PBXTargetDependency */,
+			);
+			name = Opt1Tests;
+			packageProductDependencies = (
+				P400000000000000000000A4 /* Opt1CelticKnot */,
+			);
+			productName = Opt1Tests;
+			productReference = B200000000000000000000A0 /* Opt1Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1000000000000000000000A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A6000000000000000000000A = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					B500000000000000000000A0 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A6000000000000000000000A;
+					};
+				};
+			};
+			buildConfigurationList = A700000000000000000000B0 /* Build configuration list for PBXProject "Opt1" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A5000000000000000000000A;
+			packageReferences = (
+				P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */,
+				F21F993D2F993BAB005662AA /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			productRefGroup = A5000000000000000000000B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A6000000000000000000000A /* Opt1 */,
+				B500000000000000000000A0 /* Opt1Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A400000000000000000000A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A300000000000000000000B0 /* Assets.xcassets in Resources */,
+				A300000000000000000000B5 /* MapImages in Resources */,
+				F21F8EAE2F944160005662AA /* AppIcon.icon in Resources */,
+				A300000000000000000000B9 /* PuzzleImages in Resources */,
+				A30000000000000000000102 /* SliderAnchors in Resources */,
+				A300000000000000000000DD /* MapTiles in Resources */,
+				A300000000000000000000F8 /* teleports.json in Resources */,
+				A300000000000000000000F9 /* TeleportIcons in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A400000000000000000000A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A300000000000000000000A0 /* Opt1App.swift in Sources */,
+				A300000000000000000000A1 /* AppDelegate.swift in Sources */,
+				A300000000000000000000A2 /* ScreenCaptureManager.swift in Sources */,
+				A300000000000000000000A3 /* WindowFinder.swift in Sources */,
+				A300000000000000000000A4 /* ClueScrollDetector.swift in Sources */,
+				A300000000000000000000A5 /* ImagePreprocessor.swift in Sources */,
+				A300000000000000000000A6 /* ClueTextReader.swift in Sources */,
+				A300000000000000000000A9 /* OverlayWindowController.swift in Sources */,
+				A300000000000000000000AA /* SolutionView.swift in Sources */,
+				A300000000000000000000AB /* GlobalHotkeyManager.swift in Sources */,
+				A300000000000000000000AD /* MapClueMatcher.swift in Sources */,
+				A300000000000000000000AF /* LockboxDetector.swift in Sources */,
+				A300000000000000000000B4 /* TowersDetector.swift in Sources */,
+				A300000000000000000000B8 /* PuzzleBoxOverlayController.swift in Sources */,
+				A300000000000000000000C4 /* PuzzleSnipOverlayController.swift in Sources */,
+				A300000000000000000000F0 /* OverlayPanelFactory.swift in Sources */,
+				A300000000000000000000F2 /* PuzzleDetector.swift in Sources */,
+				A300000000000000000000CA /* PuzzleBoxDetectorV2.swift in Sources */,
+				A300000000000000000000C9 /* PuzzleDetectionPipeline.swift in Sources */,
+				A300000000000000000000C5 /* GridLocalizer.swift in Sources */,
+				A300000000000000000000C6 /* PuzzleIdentifier.swift in Sources */,
+				A300000000000000000000C7 /* TileMatcher.swift in Sources */,
+				A300000000000000000000CC /* PuzzleEmbeddingExtractor.swift in Sources */,
+				A300000000000000000000CD /* PuzzleCollectionSession.swift in Sources */,
+				A300000000000000000000CE /* DatasetWriter.swift in Sources */,
+				A300000000000000000000CF /* PuzzleDataCollectionController.swift in Sources */,
+				A300000000000000000000D0 /* CelticKnotDetector.swift in Sources */,
+				A30000000000000000000110 /* NXTModalHelpers.swift in Sources */,
+				A300000000000000000000D1 /* CelticKnotDataCollectionController.swift in Sources */,
+				A30000000000000000000103 /* SliderAnchorCollectionController.swift in Sources */,
+				A30000000000000000000105 /* PuzzleModalLocator.swift in Sources */,
+				A30000000000000000000104 /* SliderInterfaceLocator.swift in Sources */,
+				A300000000000000000000D2 /* EliteCompassDetector.swift in Sources */,
+				A300000000000000000000106 /* ParchmentLocator.swift in Sources */,
+				A300000000000000000000107 /* ScanPulseFilter.swift in Sources */,
+				A300000000000000000000109 /* ScanOptimiser.swift in Sources */,
+				A300000000000000000000D3 /* CompassTriangulation.swift in Sources */,
+				A300000000000000000000FA /* CompassDigSpots.swift in Sources */,
+				A300000000000000000000D4 /* ClueOrchestrator.swift in Sources */,
+				A300000000000000000000D5 /* OverlayPresenter.swift in Sources */,
+				A300000000000000000000108 /* ScanFilterState.swift in Sources */,
+				A300000000000000000000D6 /* PipelineStatusBanner.swift in Sources */,
+				A300000000000000000000D9 /* CelticKnotSolver.swift in Sources */,
+				A300000000000000000000DA /* AppSettings.swift in Sources */,
+				A300000000000000000000DB /* DebugLogger.swift in Sources */,
+				A300000000000000000000DC /* SettingsView.swift in Sources */,
+				A30000000000000000000100 /* PermissionsState.swift in Sources */,
+				A30000000000000000000101 /* OnboardingPermissionsView.swift in Sources */,
+				A3000000000000000000010A /* KeyRecorderView.swift in Sources */,
+				A300000000000000000000FB /* CalibrationView.swift in Sources */,
+				A300000000000000000000F5 /* CreditsView.swift in Sources */,
+				A300000000000000000000F6 /* TeleportData.swift in Sources */,
+				A300000000000000000000F7 /* TeleportLayer.swift in Sources */,
+				B300000000000000000000AA /* OrchestratorDependencies.swift in Sources */,
+				B300000000000000000000AB /* SnipCoordinateMapper.swift in Sources */,
+				B300000000000000000000AC /* CaptureErrorPresenter.swift in Sources */,
+				B300000000000000000000AD /* ClueScrollPipeline.swift in Sources */,
+				B300000000000000000000AE /* SolveFlowState.swift in Sources */,
+				B300000000000000000000AF /* PuzzleBoxCoordinator.swift in Sources */,
+				B300000000000000000000B0 /* CelticKnotCoordinator.swift in Sources */,
+				B300000000000000000000B1 /* AppSessionState.swift in Sources */,
+				B300000000000000000000B3 /* CelticKnotRuneClassification.swift in Sources */,
+				B300000000000000000000B4 /* CelticKnotDebugRenderer.swift in Sources */,
+				B300000000000000000000B5 /* OverlayTheme.swift in Sources */,
+				B300000000000000000000B6 /* MapTileCache.swift in Sources */,
+				B300000000000000000000B7 /* ScrollZoomModifier.swift in Sources */,
+				B300000000000000000000B8 /* RSWorldMapView.swift in Sources */,
+				B300000000000000000000B9 /* EliteCompassView.swift in Sources */,
+				B300000000000000000000BA /* ScanListView.swift in Sources */,
+				B300000000000000000000BB /* SolutionCardView.swift in Sources */,
+				B300000000000000000000BC /* PuzzleSolutionViews.swift in Sources */,
+				B300000000000000000000BD /* DetectionHelpers.swift in Sources */,
+				P300000000000000000000A0 /* DetectionConfiguration+App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B600000000000000000000A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B300000000000000000000A4 /* CelticKnotSolverTests.swift in Sources */,
+				B300000000000000000000A8 /* Mocks.swift in Sources */,
+				B300000000000000000000A9 /* ClueOrchestratorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B800000000000000000000A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6000000000000000000000A /* Opt1 */;
+			targetProxy = B800000000000000000000A0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A700000000000000000000A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_INITIALIZATION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A700000000000000000000A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_INITIALIZATION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A700000000000000000000A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Opt1/Opt1.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 2KFN672Z9S;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Opt1/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A700000000000000000000A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = Opt1/Opt1.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 2KFN672Z9S;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Opt1/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B700000000000000000000A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2KFN672Z9S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1.Opt1Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Opt1.app/Contents/MacOS/Opt1";
+			};
+			name = Debug;
+		};
+		B700000000000000000000A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2KFN672Z9S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1.Opt1Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Opt1.app/Contents/MacOS/Opt1";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A700000000000000000000B0 /* Build configuration list for PBXProject "Opt1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A700000000000000000000A0 /* Debug */,
+				A700000000000000000000A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A700000000000000000000B1 /* Build configuration list for PBXNativeTarget "Opt1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A700000000000000000000A2 /* Debug */,
+				A700000000000000000000A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B700000000000000000000B0 /* Build configuration list for PBXNativeTarget "Opt1Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B700000000000000000000A0 /* Debug */,
+				B700000000000000000000A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Opt1CoreLibraries;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F21F993D2F993BAB005662AA /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F21F993E2F993BAB005662AA /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F21F993D2F993BAB005662AA /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+		P400000000000000000000A0 /* Opt1Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */;
+			productName = Opt1Core;
+		};
+		P400000000000000000000A1 /* Opt1Solvers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */;
+			productName = Opt1Solvers;
+		};
+		P400000000000000000000A2 /* Opt1Detection */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */;
+			productName = Opt1Detection;
+		};
+		P400000000000000000000A3 /* Opt1Matching */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */;
+			productName = Opt1Matching;
+		};
+		P400000000000000000000A4 /* Opt1CelticKnot */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = P500000000000000000000A0 /* XCLocalSwiftPackageReference "Opt1CoreLibraries" */;
+			productName = Opt1CelticKnot;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A1000000000000000000000A /* Project object */;
+}

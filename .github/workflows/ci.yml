@@ -1,0 +1,77 @@
+name: CI
+
+# Build + test on every PR targeting main and every push to main.
+# Pure quality gate: never signs, notarizes, or publishes anything.
+# Phase 4 of the public-release plan.
+
+on:
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref so we don't burn macOS minutes
+# on stale commits.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build + test
+    runs-on: macos-26
+    timeout-minutes: 25
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Pin Xcode 26.3
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+
+      # Cache the resolved Swift Package Manager artifacts (Sparkle and
+      # anything else added later). Keyed on Package.resolved so the cache
+      # invalidates the moment a dependency version changes.
+      - name: Cache SwiftPM artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData/**/SourcePackages/checkouts
+            ~/Library/Developer/Xcode/DerivedData/**/SourcePackages/artifacts
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('Opt1.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved', 'Opt1.xcodeproj/project.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Resolve Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Opt1.xcodeproj \
+            -scheme Opt1
+
+      - name: Build (Debug, unsigned)
+        run: |
+          xcodebuild build \
+            -project Opt1.xcodeproj \
+            -scheme Opt1 \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Test
+        run: |
+          xcodebuild test \
+            -project Opt1.xcodeproj \
+            -scheme Opt1 \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
