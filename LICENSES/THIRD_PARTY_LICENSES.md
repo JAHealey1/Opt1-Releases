@@ -20,16 +20,10 @@ ClueTrainer's source into Swift, including:
 
 - The Celtic Knot rotation cost / canonical-pick logic in
   `Opt1/Solvers/CelticKnotSolver.swift`.
-- The elite compass reader pipeline — flood-fill rose detection, MSAA
-  detection, AA pixel-count windows, and the binary-search /
-  keyframe-interpolation calibration tables — adapted from
+- The binary-search / keyframe-interpolation calibration tables — adapted from
   `src/trainer/ui/neosolving/cluereader/CompassReader.ts` and
-  `…/capture/CompassCalibrationFunction.ts` into
-  `Opt1/Detection/EliteCompassDetector.swift`,
-  `Opt1/Detection/CompassCalibration.swift`, and
-  `Opt1/Detection/UncertainAngle.swift`.
-- The teleport spot dataset (ported from `src/data/teleport_data.ts` into
-  `Opt1/Matching/Resources/teleports.json`).
+  `…/capture/CompassCalibrationFunction.ts`.
+- The teleport spot dataset (ported from `src/data/teleport_data.ts`).
 
 **License (MIT).**
 

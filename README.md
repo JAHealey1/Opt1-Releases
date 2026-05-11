@@ -3,7 +3,7 @@
 Opt1 is a free macOS helper for *RuneScape 3* clue scrolls. Open a clue scroll
 on screen, hit the hotkey, and Opt1 reads it, matches it against the wiki
 corpus, and renders the answer as a draggable overlay above your game window.
-It also solves Celtic Knots, Slide Puzzles, lockbox's, and towers puzzles.
+It also solves Celtic Knots, Slide Puzzles, Lockboxes, and Towers puzzles.
 
 ## System requirements
 
@@ -24,8 +24,6 @@ brew tap JAHealey1/opt1
 brew install opt1
 ```
 
-
-
 ## First launch & permissions
 
 Opt1 needs two macOS permissions before it can do anything useful:
@@ -44,11 +42,47 @@ later via the menu bar item: *Opt1 → Permissions…*. macOS occasionally
 forgets these toggles after upgrades — if Opt1 stops working after a
 macOS update, re-toggle both permissions OFF and ON.
 
+> **Recommended:** Enable Debug mode in *Opt1 → Settings… → Diagnostics*. The
+> data written to the debug folder is essential for diagnosing any issues.
+
 ## Updates
 
-You can check for updates in the Menu Bar *Opt1 → Check for Updates…*. 
+You can check for updates in the menu bar via *Opt1 → Check for Updates…*.
 During an update you can opt in to auto-updates in the future.
 
+## Clue Support
+
+| Type | Status | Notes |
+|---|---|---|
+| Simple, Riddle, Cryptic, Anagram, Emote, Coordinates | ✅ | |
+| Map clues | ✅ | |
+| Scan clues | ✅ | |
+| Slide puzzles | ✅ | `⌥2` to snip puzzle area, or `⌥1` for autodetection *(experimental)* |
+| Celtic Knot puzzles | ✅ | |
+| Lockboxes | ✅ | |
+| Towers puzzles | ✅ | |
+| Elite/Master Compasses | ✅ | |
+
+## Advanced Features
+
+### Compass Auto-Triangulation
+
+You can calibrate two triangulation spots in settings so that clicking the map manually is not necessary. When you have a compass clue:
+
+1. Teleport to your first calibrated spot and press `⌥1`
+2. Teleport to your second calibrated spot and press `⌥1`
+
+The intersection is calculated and zoomed to automatically. You can also configure a separate pair of Eastern Lands triangulation points in settings.
+
+### Other Features
+
+| Feature | Notes |
+|---|---|
+| RuneScape UI scaling | Tell Opt1 your scale factor in settings *(experimental)* |
+| Scan guidance | Enable in settings — pathing data is limited and will improve in future releases *(experimental)* |
+| Custom keybinds | Configurable in settings |
+| Puzzle solve speed | Tunable in settings |
+| Draggable / resizable UI | All overlay panels can be repositioned and resized |
 
 ## Reporting issues
 
@@ -71,11 +105,9 @@ via *Settings → Credits & Licenses*.
 
 ### ClueTrainer (MIT)
 
-Opt1 ports several pieces of [ClueTrainer](https://github.com/Leridon/cluetrainer)
-into Swift — the elite compass reader (flood-fill rose detection, MSAA detection, AA
-pixel-count windows, and the binary-search / keyframe-interpolation
-calibration tables ported from `CompassReader.ts` and
-`CompassCalibrationFunction.ts`), and the teleport spot dataset.
+Opt1 ports the binary-search / keyframe-interpolation
+calibration tables from `CompassReader.ts` and
+`CompassCalibrationFunction.ts`, and the teleport spot dataset from [ClueTrainer](https://github.com/Leridon/cluetrainer) into Swift.
 ClueTrainer is © 2024 Lukas Gail and is distributed under the MIT License. The full
 licence text is reproduced in `LICENSES/THIRD_PARTY_LICENSES.md`.
 
