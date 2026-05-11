@@ -6,16 +6,16 @@
     <description>Most recent updates to Opt1.</description>
     <language>en</language>
     <item>
-      <title>Version 1.0.3</title>
-      <pubDate>Thu, 07 May 2026 13:38:41 +0000</pubDate>
-      <sparkle:version>4</sparkle:version>
-      <sparkle:shortVersionString>1.0.3</sparkle:shortVersionString>
+      <title>Version 1.0.4</title>
+      <pubDate>Mon, 11 May 2026 11:40:41 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>1.0.4</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <description><![CDATA[<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Opt1 1.0.3 release notes</title>
+  <title>Opt1 1.0.4 release notes</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
            font-size: 13px; line-height: 1.5; padding: 12px; }
@@ -30,29 +30,65 @@
   </style>
 </head>
 <body>
-<h1>Opt1 1.0.3</h1>
+<h1>Opt1 1.0.4</h1>
 <h2>What's new</h2>
 <ul>
-<li>Significantly improved Celtic Knot detection and solving.</li>
-<li>Celtic knot no longer requires inversion for every puzzle.</li>
-<li>Added an additional set of auto-triangulation points for Arc compasses.</li>
-<li>Fixed lockbox and towers puzzles not detecting on larger screens.</li>
-<li>Experimental support for RS3 in game UI scaling (tell us your scale in settings!).</li>
-<li>The map in the compass window now zooms in on any calculated intersection.</li>
-<li>Signficantly improved Scan clue detection.</li>
-<li>Experimental support for scan clue pathing guidance.</li>
-<li>Your choice to 'show all spots' in the compass window is now remembered.</li>
-<li>Fixed some teleport locations showing in the wrong place.</li>
-<li>Dig spots and teleport locations now show on the Arc map.</li>
-<li>General improvements to matching of clue text.</li>
-<li>Compass window is now moveable.</li>
-<li>Scan window is now resizeable.</li>
-<li>Aligned themeing across all windows.</li>
-<li>Release notes should now display properly.</li>
+<li>First public release</li>
 </ul>
 </body>
 </html>
 ]]></description>
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
+      <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.4/Opt1-1.0.4.dmg" sparkle:edSignature="3af9i+++EQzwfKrx8K6oNQhJT5lwYJMd0n4hAdNvqmw/nN3yA/vFXOXIdC/N8aZwN9DgzOqcgqvHXKEnaVyHDQ==" length="86673558" type="application/octet-stream" />
+    </item>
+    <item>
+      <title>Version 1.0.3</title>
+      <pubDate>Thu, 07 May 2026 13:38:41 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>1.0.3</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Opt1 1.0.3 release notes&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+           font-size: 13px; line-height: 1.5; padding: 12px; }
+    h1, h2, h3 { margin-top: 1em; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+           background: rgba(127,127,127,0.15); padding: 1px 4px;
+           border-radius: 3px; }
+    pre code { display: block; padding: 8px; }
+    ul, ol { padding-left: 1.5em; }
+    a { color: #0a84ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Opt1 1.0.3&lt;/h1&gt;
+&lt;h2&gt;What's new&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Significantly improved Celtic Knot detection and solving.&lt;/li&gt;
+&lt;li&gt;Celtic knot no longer requires inversion for every puzzle.&lt;/li&gt;
+&lt;li&gt;Added an additional set of auto-triangulation points for Arc compasses.&lt;/li&gt;
+&lt;li&gt;Fixed lockbox and towers puzzles not detecting on larger screens.&lt;/li&gt;
+&lt;li&gt;Experimental support for RS3 in game UI scaling (tell us your scale in settings!).&lt;/li&gt;
+&lt;li&gt;The map in the compass window now zooms in on any calculated intersection.&lt;/li&gt;
+&lt;li&gt;Signficantly improved Scan clue detection.&lt;/li&gt;
+&lt;li&gt;Experimental support for scan clue pathing guidance.&lt;/li&gt;
+&lt;li&gt;Your choice to 'show all spots' in the compass window is now remembered.&lt;/li&gt;
+&lt;li&gt;Fixed some teleport locations showing in the wrong place.&lt;/li&gt;
+&lt;li&gt;Dig spots and teleport locations now show on the Arc map.&lt;/li&gt;
+&lt;li&gt;General improvements to matching of clue text.&lt;/li&gt;
+&lt;li&gt;Compass window is now moveable.&lt;/li&gt;
+&lt;li&gt;Scan window is now resizeable.&lt;/li&gt;
+&lt;li&gt;Aligned themeing across all windows.&lt;/li&gt;
+&lt;li&gt;Release notes should now display properly.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</description>
       <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
       <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.3/Opt1-1.0.3.dmg" sparkle:edSignature="XQn+NFqoea4Z5a7iZGnMn/Dx80p4utVq7N0HDJQOwJ9a3SXHlFXC90DcxU7UoLzhVLpt5hJW73blXRNOv5y0DA==" length="86613977" type="application/octet-stream" />
     </item>
