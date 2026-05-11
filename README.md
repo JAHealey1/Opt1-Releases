@@ -8,21 +8,23 @@ It also solves Celtic Knots, Slide Puzzles, lockbox's, and towers puzzles.
 ## System requirements
 
 - macOS 14.0 (Sonoma) or newer
-- Apple Silicon or Intel Mac (universal binary) (untested on Intel but should work)
+- Apple Silicon or Intel Mac (untested on Intel but should work)
 
 ## Install
 
-### Recommended: Homebrew
-
-```bash
-brew tap JAHealey1/opt1
-brew install --cask opt1
-```
-
-### Direct download
+### Recommended: Direct download
 
 Latest release: [Download](https://github.com/JAHealey1/Opt1-Releases/releases/latest)
 Open the .dmg, and drag `Opt1.app` into `/Applications`.
+
+### Alternative: Homebrew
+
+```bash
+brew tap JAHealey1/opt1
+brew install opt1
+```
+
+
 
 ## First launch & permissions
 
@@ -44,16 +46,9 @@ macOS update, re-toggle both permissions OFF and ON.
 
 ## Updates
 
-Opt1 ships with [Sparkle](https://sparkle-project.org). It checks this
-repository's `appcast.xml` once a day in the background and, when it finds a
-newer version, downloads + verifies + installs it on quit. You can also
-trigger an update check manually from *Opt1 → Check for Updates…* in the
-menu bar.
+You can check for updates in the Menu Bar *Opt1 → Check for Updates…*. 
+During an update you can opt in to auto-updates in the future.
 
-Updates are signed with an EdDSA key whose public half is baked into the
-shipped app. Sparkle refuses to install any DMG whose signature doesn't
-match — so even a compromised GitHub release can't push a malicious binary
-to existing installs.
 
 ## Reporting issues
 
@@ -65,9 +60,7 @@ details:
   (visible at *Opt1 → Settings… → About*).
 - The clue text or screenshot of the puzzle that failed.
 - What Opt1 showed vs. what the correct answer was.
-
-Source code is closed, but bug reports against the released binary are
-very welcome — they're how Opt1 improves!
+- If you have Debug mode enabled, include the contents of the relevant debug folder (*Opt1 → Settings... → Diagnostics → Debug output folder*)
 
 ## Credits & Licenses
 
@@ -79,13 +72,11 @@ via *Settings → Credits & Licenses*.
 ### ClueTrainer (MIT)
 
 Opt1 ports several pieces of [ClueTrainer](https://github.com/Leridon/cluetrainer)
-into Swift — the Celtic Knot rotation cost / canonical-pick logic, the
-elite compass reader (flood-fill rose detection, MSAA detection, AA
+into Swift — the elite compass reader (flood-fill rose detection, MSAA detection, AA
 pixel-count windows, and the binary-search / keyframe-interpolation
 calibration tables ported from `CompassReader.ts` and
 `CompassCalibrationFunction.ts`), and the teleport spot dataset.
-ClueTrainer is
-© 2024 Lukas Gail and is distributed under the MIT License. The full
+ClueTrainer is © 2024 Lukas Gail and is distributed under the MIT License. The full
 licence text is reproduced in `LICENSES/THIRD_PARTY_LICENSES.md`.
 
 ### RuneScape Wiki (CC BY-NC-SA 3.0)
