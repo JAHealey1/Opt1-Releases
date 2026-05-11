@@ -100,14 +100,19 @@ community tools such as [RuneLite](https://runelite.net/),
 
 Opt1 is not affiliated with, endorsed by, or sponsored by Jagex Ltd. If you
 are a Jagex rights-holder and would like Opt1 to remove or change a specific
-asset, please open an issue on the public releases repository at
-<https://github.com/jacobhealey/Opt1-Releases>.
+asset, please open an issue on the repository at
+<https://github.com/JAHealey1/Opt1>.
 
 ---
 
 ## 4. Opt1 itself
 
-Opt1's Swift source is © 2026 Jacob Healey. It is shipped free of charge for
-non-commercial use; redistribution of the binary should preserve this file
-and the per-asset `LICENSE.txt` notices. See `Opt1-Releases/LICENSES/LICENSE`
-in the public release repository for the user-facing terms.
+Opt1's Swift source is © 2026 Jacob Healey and is released under the
+**GNU General Public License v3.0 or later (GPL-3.0-or-later)**. The full
+licence text is in `LICENSE` at the repository root
+(<https://github.com/JAHealey1/Opt1>).
+
+Redistribution of the binary should preserve this file and the per-asset
+`LICENSE.txt` notices. The bundled RuneScape Wiki assets carry an additional
+CC BY-NC-SA 3.0 constraint (non-commercial) that applies independently of the
+GPL on the Swift source.

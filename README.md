@@ -14,7 +14,7 @@ It also solves Celtic Knots, Slide Puzzles, Lockboxes, and Towers puzzles.
 
 ### Recommended: Direct download
 
-Latest release: [Download](https://github.com/JAHealey1/Opt1-Releases/releases/latest)
+Latest release: [Download](https://github.com/JAHealey1/Opt1/releases/latest)
 Open the .dmg, and drag `Opt1.app` into `/Applications`.
 
 ### Alternative: Homebrew
@@ -87,7 +87,7 @@ The intersection is calculated and zoomed to automatically. You can also configu
 ## Reporting issues
 
 Found a bug, a misread clue, or a puzzle Opt1 gets wrong? Please open an
-[issue](https://github.com/JAHealey1/Opt1-Releases/issues/new). Helpful
+[issue](https://github.com/JAHealey1/Opt1/issues/new). Helpful
 details:
 
 - macOS version, chip family (Apple Silicon vs Intel), Opt1 version
@@ -131,11 +131,41 @@ scrolls — the same fan-tool posture taken by long-running community projects
 like [RuneLite](https://runelite.net/), [Alt1](https://runeapps.org/alt1),
 and ClueTrainer. Opt1 is not affiliated with, endorsed by, or sponsored by
 Jagex Ltd. If you are a Jagex rights-holder and want a specific asset
-removed or changed, please open an issue on this repository.
+removed or changed, please open an issue at <https://github.com/JAHealey1/Opt1>.
+
+## Building from source
+
+Requirements: **Xcode 26** (macOS 26 SDK), macOS 14 or newer.
+
+```bash
+git clone https://github.com/JAHealey1/Opt1.git
+cd Opt1
+open Opt1.xcodeproj
+```
+
+`Opt1CoreLibraries` is a local Swift package (included in the repo under `Opt1CoreLibraries/`). Xcode resolves it automatically via the local package reference in the project — no extra steps needed.
+
+Select the **Opt1** scheme and press **⌘R** to build and run.
+
+> The ML models and bundled map tiles are checked in under
+> `Opt1/Matching/Resources/` so the app builds and runs fully offline straight
+> from the clone.
+
+## Contributing
+
+Issues and pull requests are welcome. A few things to know:
+
+- The training pipeline (Python scripts for scraping wiki data and building the ML models) lives in a separate private repo, `JAHealey1/Opt1-Scripts`. The pre-built model outputs are already committed here, so you don't need the pipeline to build or modify the app.
+- The bundled RuneScape Wiki assets (map tiles, teleport icons) carry a **CC BY-NC-SA 3.0** licence. Any contribution that adds or modifies those assets must preserve that notice.
+- Opt1 is a macOS-only app. PRs that require UI changes should be tested on a real Mac running macOS 14+.
 
 ## License
 
-Opt1's own source code is © 2026 Jacob Healey. See `LICENSES/LICENSE` for
-the user-facing redistribution terms. Redistribution of the Opt1 binary
-should preserve `LICENSES/THIRD_PARTY_LICENSES.md` (or an equivalent notice)
-alongside the build.
+Opt1's Swift source is © 2026 Jacob Healey and is released under the
+**GNU General Public License v3.0 or later**. See `LICENSE` at the repo root
+for the full text.
+
+Redistribution of the binary should preserve `LICENSES/THIRD_PARTY_LICENSES.md`
+(or an equivalent notice) alongside the build. The bundled RuneScape Wiki
+assets carry an additional CC BY-NC-SA 3.0 constraint (non-commercial) that
+applies independently of the GPL on the source.
