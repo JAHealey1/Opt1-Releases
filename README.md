@@ -1,6 +1,6 @@
 # Opt1
 
-Opt1 is a free macOS helper for *RuneScape 3* clue scrolls. Open a clue scroll
+Opt1 is a free and open-source macOS helper for *RuneScape 3* clue scrolls. Open a clue scroll
 on screen, hit the hotkey, and Opt1 reads it, matches it against the wiki
 corpus, and renders the answer as a draggable overlay above your game window.
 It also solves Celtic Knots, Slide Puzzles, Lockboxes, and Towers puzzles.
