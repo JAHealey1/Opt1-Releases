@@ -957,17 +957,6 @@
     "code": "3"
   },
   {
-    "groupId": "diskofreturning",
-    "groupName": "Disk of returning",
-    "id": "return",
-    "name": "Return",
-    "icon": "Disk_of_returning_(Gower_Quest).png",
-    "x": 2982,
-    "y": 9804,
-    "level": 0,
-    "code": null
-  },
-  {
     "groupId": "dragonkinlaboratory",
     "groupName": "Dragonkin Laboratory teleport",
     "id": "spot",
@@ -3113,17 +3102,6 @@
     "code": "2"
   },
   {
-    "groupId": "magicwhistle",
-    "groupName": "Magic whistle",
-    "id": "return",
-    "name": "Return",
-    "icon": "Magic_whistle.webp",
-    "x": 2741,
-    "y": 3235,
-    "level": 0,
-    "code": null
-  },
-  {
     "groupId": "memorystrands",
     "groupName": "Memory strands",
     "id": "hallofmemories",
@@ -3528,7 +3506,7 @@
     "x": 2329,
     "y": 3585,
     "level": 0,
-    "code": "1"
+    "code": "1,1"
   },
   {
     "groupId": "naturessentinel",

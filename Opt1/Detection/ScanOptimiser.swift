@@ -17,6 +17,10 @@ struct RecommendedScanStep {
     let expectedDouble: Int
     /// How many surviving candidates would yield a single pulse from here.
     let expectedSingle: Int
+    /// Expected number of candidates remaining after one observation here,
+    /// under a uniform prior over the surviving set.
+    /// Computed as (T² + D² + S²) / n. Lower is better.
+    let expectedRemaining: Double
 
     var isTeleport: Bool { teleport != nil }
 
@@ -24,6 +28,11 @@ struct RecommendedScanStep {
     /// e.g. "splits 8 / 4 / 3".
     var splitDescription: String {
         "splits \(expectedTriple) / \(expectedDouble) / \(expectedSingle)"
+    }
+
+    /// Human-readable expected-remaining hint, e.g. "exp 4.2 remaining".
+    var expectedRemainingDescription: String {
+        String(format: "exp %.1f remaining", expectedRemaining)
     }
 }
 
@@ -33,19 +42,26 @@ struct RecommendedScanStep {
 /// scan clue triangulation.
 ///
 /// ## Strategy
-/// Uses a **greedy minimax** approach: for every candidate standing position,
-/// compute how many surviving candidates would produce a triple, double, or
-/// single pulse. The position whose *worst-case bucket* is smallest is chosen.
-/// This minimises how many candidates can still survive after one unlucky
-/// observation, which is the safest strategy when you don't know the answer.
+/// Uses a **multi-factor lexicographic score** to rank candidates:
 ///
-/// ## Travel awareness
-/// When the player's last known position is supplied via `playerPos`, the
-/// algorithm uses a *tolerance window* (scaled to the scan range) to shortlist
-/// candidates that are informatively close to the minimax optimum, then picks
-/// the geographically nearest one. A nearby teleport that is also within
-/// tolerance is promoted to the primary recommendation so the player can
-/// arrive for free.
+/// 1. **Worst-case bucket** (`max(triple, double, single)`) — greedy minimax
+///    primary criterion; minimises the most candidates that can survive after
+///    one unlucky observation.
+/// 2. **Expected remaining** (`(T² + D² + S²) / n`) — information-theoretic
+///    tie-breaker; rewards balanced splits and maximises expected eliminations.
+/// 3. **Travel cost** — for non-teleport candidates this is BFS walking distance
+///    (or Chebyshev fallback) from the player's last known position. For teleport
+///    candidates it is the fixed `teleportOverhead` constant (~15 tiles), since
+///    teleports are instant regardless of current position.
+/// 4. **Teleport preference** — when two candidates share the same travel cost
+///    (e.g. two teleport destinations), a teleport beats a plain grid point as a
+///    last-resort tie-breaker.
+///
+/// ## Tolerance window
+/// The travel-cost ranking is only applied within candidates whose
+/// `worstBucket` is at most `worstBucketTolerance` tiles above the global
+/// minimum. This prevents a near-optimal but distant position from winning
+/// over a slightly-less-optimal one that is much closer.
 ///
 /// ## Sea filtering
 /// Grid-point candidates whose map pixels match the RS3 wiki sea colour are
@@ -55,25 +71,55 @@ struct RecommendedScanStep {
 /// Two sources of candidate positions are evaluated:
 ///
 /// 1. **Teleport destinations** within 2·range tiles of any surviving spot
-///    (from `TeleportCatalogue`). These are always included and never sea-filtered.
+///    (from `TeleportCatalogue`). These are always included and never
+///    sea-filtered.
 /// 2. A **regular grid** at `gridStep`-tile spacing over the same bounding
 ///    box, minus tiles already covered by a teleport and minus sea tiles.
-///
-/// ## Performance
-/// Typical scan regions have ≤30 spots and ≤300 candidates. Each call
-/// performs O(candidates × spots) Chebyshev distance computations —
-/// well under a millisecond for these sizes. Sea-filtering adds one bitmap
-/// pixel lookup per grid point; tiles are cached within the call.
 enum ScanOptimiser {
 
-    /// Tile spacing of the observation-point grid. Finer → better coverage;
-    /// coarser → faster. 8 tiles gives ~300 grid points for a 50-tile-wide
-    /// region, which is more than sufficient for good coverage.
+    /// Tile spacing of the observation-point grid.
     private static let gridStep = 8
 
     /// A candidate grid point within this Chebyshev distance of a teleport
     /// destination is suppressed — the teleport entry already covers the area.
     private static let teleportExclusionRadius = 5
+
+    /// Nominal travel-cost assigned to every teleport candidate (tiles).
+    ///
+    /// Teleports are instant regardless of where the player currently stands,
+    /// so their real travel cost is effectively zero. However, using a teleport
+    /// does carry a small interface overhead (opening the menu, animation, load
+    /// screen) — roughly equivalent to walking ~15 tiles. Assigning this fixed
+    /// cost means:
+    ///   • Teleports win when the nearest walk-to scan position is further than
+    ///     `teleportOverhead` tiles away.
+    ///   • Plain grid points that are *closer* than `teleportOverhead` tiles
+    ///     beat teleports — no point teleporting when you're already nearby.
+    private static let teleportOverhead = 15
+
+    // MARK: - Private Scoring Type
+
+    /// Multi-factor score for a candidate observation position.
+    /// Lexicographic `<` means lower == better across all four criteria.
+    private struct CandidateScore: Comparable {
+        /// Minimax worst-case bucket size. Primary criterion.
+        let worstBucket: Int
+        /// Information-theoretic expected candidates remaining = (T²+D²+S²)/n.
+        /// Penalises unbalanced splits; rewards maximum expected eliminations.
+        let expectedRemaining: Double
+        /// 0 for a teleport destination (preferred), 1 for a plain grid point.
+        let notTeleport: Int
+        /// Walking distance from the player's last known position.
+        /// 0 when no player position is supplied.
+        let travelCost: Int
+
+        static func < (lhs: Self, rhs: Self) -> Bool {
+            (lhs.worstBucket, lhs.expectedRemaining,
+             lhs.travelCost,  lhs.notTeleport)
+            < (rhs.worstBucket, rhs.expectedRemaining,
+               rhs.travelCost,  rhs.notTeleport)
+        }
+    }
 
     // MARK: - Public API
 
@@ -96,9 +142,8 @@ enum ScanOptimiser {
     ///                      the player will arrive at the region via teleport
     ///                      and gets that reading for free.
     ///   - playerPos:       Player's last known position (from the most recent
-    ///                      confirmed observation). When non-nil, candidates
-    ///                      within the tolerance window are ranked by proximity
-    ///                      to this point rather than by exact minimax score.
+    ///                      confirmed observation). When non-nil, travel cost is
+    ///                      factored into scoring within the tolerance window.
     /// - Returns: The best recommendation, or `nil` when ≤1 candidate
     ///            survives (no further discrimination is useful).
     static func recommend(
@@ -122,15 +167,17 @@ enum ScanOptimiser {
         let xs = survivingCoords.map(\.x)
         let ys = survivingCoords.map(\.y)
         let margin = range * 2
-        let xMin = xs.min()! - margin
-        let xMax = xs.max()! + margin
-        let yMin = ys.min()! - margin
-        let yMax = ys.max()! + margin
+        guard let xLow = xs.min(), let xHigh = xs.max(),
+              let yLow = ys.min(), let yHigh = ys.max() else { return nil }
+        let xMin = xLow  - margin
+        let xMax = xHigh + margin
+        let yMin = yLow  - margin
+        let yMax = yHigh + margin
 
         let nearTeleports = TeleportCatalogue.shared
             .spots(forMapId: mapId, plane: plane)
-            .filter { $0.x >= xMin && $0.x <= xMax
-                   && $0.y >= yMin && $0.y <= yMax }
+            .filter { $0.x >= xLow - range && $0.x <= xHigh + range
+                   && $0.y >= yLow - range && $0.y <= yHigh + range }
 
         // Build the candidate pool.
         var candidates: [(x: Int, y: Int, teleport: TeleportSpot?)] = []
@@ -160,10 +207,21 @@ enum ScanOptimiser {
 
         guard !candidates.isEmpty else { return nil }
 
-        // MARK: Scoring helpers
+        let n = survivingCoords.count
+
+        // Pre-compute BFS distance map from playerPos when a walkability grid
+        // is available for this region. Falls back to Chebyshev otherwise.
+        let walkGrid = WalkabilityCache.shared.grid(
+            forMapId: mapId, xMin: xMin, yMin: yMin, xMax: xMax, yMax: yMax)
+        let bfsDist: [Int]? = playerPos.flatMap { pos in
+            guard let g = walkGrid else { return nil }
+            return BFSPathfinder.distanceMap(from: pos, over: g)
+        }
+
+        // MARK: Scoring helper
 
         func score(_ c: (x: Int, y: Int, teleport: TeleportSpot?))
-            -> RecommendedScanStep?
+            -> (step: RecommendedScanStep, cs: CandidateScore)?
         {
             var triple = 0, dbl = 0, single = 0
             for coord in survivingCoords {
@@ -179,18 +237,45 @@ enum ScanOptimiser {
                                 + (dbl    > 0 ? 1 : 0)
                                 + (single > 0 ? 1 : 0)
             guard nonEmptyBuckets >= 2 else { return nil }
-            return RecommendedScanStep(
-                x:              c.x,
-                y:              c.y,
-                teleport:       c.teleport,
-                expectedTriple: triple,
-                expectedDouble: dbl,
-                expectedSingle: single
-            )
-        }
 
-        func worstBucket(_ step: RecommendedScanStep) -> Int {
-            max(step.expectedTriple, max(step.expectedDouble, step.expectedSingle))
+            let expRem = Double(triple*triple + dbl*dbl + single*single) / Double(n)
+            let worst  = max(triple, max(dbl, single))
+
+            // Travel cost: teleports are instant so pay only a fixed overhead;
+            // non-teleports use BFS walking distance when a grid is available,
+            // otherwise Chebyshev distance. Zero when no player position known.
+            let travelCost: Int
+            if let pos = playerPos {
+                if c.teleport != nil {
+                    travelCost = teleportOverhead
+                } else if let bfs = bfsDist,
+                   let g   = walkGrid,
+                   let idx = g.gridIndex(gameX: c.x, gameY: c.y),
+                   bfs[idx] != Int.max {
+                    travelCost = bfs[idx]
+                } else {
+                    travelCost = max(abs(c.x - pos.x), abs(c.y - pos.y))
+                }
+            } else {
+                travelCost = 0
+            }
+
+            let step = RecommendedScanStep(
+                x:                 c.x,
+                y:                 c.y,
+                teleport:          c.teleport,
+                expectedTriple:    triple,
+                expectedDouble:    dbl,
+                expectedSingle:    single,
+                expectedRemaining: expRem
+            )
+            let cs = CandidateScore(
+                worstBucket:       worst,
+                expectedRemaining: expRem,
+                notTeleport:       c.teleport == nil ? 1 : 0,
+                travelCost:        travelCost
+            )
+            return (step, cs)
         }
 
         // MARK: First-step path (preferTeleports)
@@ -199,79 +284,43 @@ enum ScanOptimiser {
             // The player arrives at the region via teleport and gets that tile's
             // reading for free. Even a suboptimal teleport split is better than
             // walking past a free observation to reach a marginally better spot.
-            var bestTeleScore = Int.max
-            var bestTeleStep:  RecommendedScanStep?
-
+            var best: (step: RecommendedScanStep, cs: CandidateScore)?
             for c in candidates where c.teleport != nil {
-                guard let step = score(c) else { continue }
-                let s = worstBucket(step)
-                if s < bestTeleScore { bestTeleScore = s; bestTeleStep = step }
+                guard let scored = score(c) else { continue }
+                if best == nil || scored.cs < best!.cs {
+                    best = scored
+                }
             }
-
-            if let tele = bestTeleStep { return tele }
+            if let best { return best.step }
             // No informative teleport — fall through to the normal pass below.
         }
 
-        // MARK: Normal minimax pass
+        // MARK: Normal pass
 
-        // Tolerance window and snap radius both scale with range so they remain
-        // proportionate across small and large scan areas.
-        //   worstBucketTolerance: range 5→1, 10→2, 20→4, 30→6
-        //   nearbyTeleportRadius: range 5→5, 10→5, 20→10, 30→15
+        // Tolerance scales with range so it stays proportionate across scan areas:
+        //   range 5→1, 10→2, 20→4, 30→6
         let worstBucketTolerance = max(1, range / 5)
-        let nearbyTeleportRadius = max(5, range / 2)
 
-        // Pass 1: score all candidates and record the global minimax optimum.
-        var allScored: [(step: RecommendedScanStep, isTele: Bool)] = []
+        // Pass 1: score all candidates, record the global minimum worstBucket
+        // independently of travel cost so the tolerance threshold is fair.
+        var allScored: [(step: RecommendedScanStep, cs: CandidateScore)] = []
         var bestWorse = Int.max
 
         for c in candidates {
-            guard let step = score(c) else { continue }
-            let w = worstBucket(step)
-            if w < bestWorse { bestWorse = w }
-            allScored.append((step, c.teleport != nil))
+            guard let scored = score(c) else { continue }
+            if scored.cs.worstBucket < bestWorse { bestWorse = scored.cs.worstBucket }
+            allScored.append(scored)
         }
 
         guard !allScored.isEmpty else { return nil }
 
-        if let playerPos {
-            // Pass 2: shortlist every candidate within the tolerance window,
-            // then pick the one closest to the player's last known position.
-            let shortlist = allScored.filter {
-                worstBucket($0.step) <= bestWorse + worstBucketTolerance
-            }
-            guard let walkTo = shortlist.min(by: { a, b in
-                let dA = max(abs(a.step.x - playerPos.x), abs(a.step.y - playerPos.y))
-                let dB = max(abs(b.step.x - playerPos.x), abs(b.step.y - playerPos.y))
-                return dA < dB
-            })?.step else { return nil }
-
-            // If the best candidate is already a teleport, return it directly.
-            if walkTo.teleport != nil { return walkTo }
-
-            // Pass 3: try to snap to a nearby teleport that is also informative
-            // within the same tolerance window. If one exists, use it as the
-            // recommended scan spot — the player teleports there for free.
-            let snapped = nearTeleports.compactMap { tele -> RecommendedScanStep? in
-                let distToWalkTo = max(abs(tele.x - walkTo.x), abs(tele.y - walkTo.y))
-                guard distToWalkTo <= nearbyTeleportRadius else { return nil }
-                guard let teleStep = score((tele.x, tele.y, tele)) else { return nil }
-                guard worstBucket(teleStep) <= bestWorse + worstBucketTolerance else { return nil }
-                return teleStep
-            }.min(by: { a, b in
-                // Among qualifying teleports, prefer the one nearest the walk-to spot.
-                let dA = max(abs(a.x - walkTo.x), abs(a.y - walkTo.y))
-                let dB = max(abs(b.x - walkTo.x), abs(b.y - walkTo.y))
-                return dA < dB
-            })
-
-            return snapped ?? walkTo
-
-        } else {
-            // No playerPos: pure minimax with teleport tie-break.
-            let bestEntries = allScored.filter { worstBucket($0.step) == bestWorse }
-            return bestEntries.first(where: { $0.isTele })?.step
-                ?? bestEntries.first?.step
+        // Pass 2: shortlist every candidate within the tolerance window, then
+        // let the full CandidateScore (expectedRemaining → teleport → travelCost)
+        // pick the winner. This replaces the original three-pass nearest/snap
+        // logic with a single min() over the structured score.
+        let shortlist = allScored.filter {
+            $0.cs.worstBucket <= bestWorse + worstBucketTolerance
         }
+        return shortlist.min(by: { $0.cs < $1.cs })?.step
     }
 }

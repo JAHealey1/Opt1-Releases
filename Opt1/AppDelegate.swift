@@ -72,6 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupHotkey()
         clueDatabase.load()
         TeleportCatalogue.shared.load()
+        WalkabilityCache.shared.load()
 
         captureErrorPresenter.onOpenPermissions = { [weak self] in self?.openPermissions() }
         NotificationCenter.default.addObserver(

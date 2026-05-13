@@ -86,8 +86,19 @@ final class ScanFilterState: ObservableObject {
 
     /// Locks in the pending position with the observed pulse, appending a new
     /// observation and recomputing the surviving candidate set.
+    ///
+    /// If the user hasn't double-tapped a position, falls back to the current
+    /// recommended step's position so they can confirm a pulse without needing
+    /// to explicitly select the suggested tile first.
     func confirmPulse(_ pulse: ScanPulse) {
-        guard let pos = pendingPos else { return }
+        let pos: (x: Int, y: Int)
+        if let p = pendingPos {
+            pos = p
+        } else if let s = recommendedStep {
+            pos = (s.x, s.y)
+        } else {
+            return
+        }
         observations.append(Observation(x: pos.x, y: pos.y, pulse: pulse))
         pendingPos = nil
         recompute()
