@@ -44,6 +44,19 @@ struct ScanListView: View {
         return (x: step.x, y: step.y)
     }
 
+    /// True when pressing a pulse button will record an observation — either
+    /// because the user has explicitly double-tapped a position, or because
+    /// the optimiser has a recommended step to fall back to.
+    private var canConfirmPulse: Bool {
+        state.pendingPos != nil || state.recommendedStep != nil
+    }
+
+    /// True when the pulse will be applied to the optimiser-suggested position
+    /// (i.e. the user hasn't overridden it with a double-tap).
+    private var usingRecommendedPos: Bool {
+        state.pendingPos == nil && state.recommendedStep != nil
+    }
+
     /// Spots eliminated by the filter — shown dimmed rather than removed.
     private var dimmedPins: [(x: Int, y: Int)] {
         guard filterActive else { return [] }
@@ -206,6 +219,13 @@ struct ScanListView: View {
                         Text("Pulse:")
                             .font(.system(size: 10))
                             .foregroundColor(.white.opacity(0.55))
+                    } else if usingRecommendedPos {
+                        Image(systemName: "mappin.circle.fill")
+                            .font(.system(size: 11))
+                            .foregroundColor(OverlayTheme.gold.opacity(0.85))
+                        Text("Pulse at suggested:")
+                            .font(.system(size: 10))
+                            .foregroundColor(OverlayTheme.gold.opacity(0.6))
                     } else {
                         Image(systemName: state.observations.isEmpty ? "hand.tap" : "hand.tap.fill")
                             .font(.system(size: 11))
@@ -222,19 +242,19 @@ struct ScanListView: View {
                             Text(pulse.label)
                                 .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                 .foregroundColor(
-                                    state.pendingPos != nil
+                                    canConfirmPulse
                                         ? pulseColor(pulse).opacity(0.9)
                                         : .white.opacity(0.2)
                                 )
                                 .padding(.horizontal, 8).padding(.vertical, 3)
                                 .background(Capsule().fill(
-                                    state.pendingPos != nil
+                                    canConfirmPulse
                                         ? pulseColor(pulse).opacity(0.18)
                                         : Color.white.opacity(0.05)
                                 ))
                         }
                         .buttonStyle(.plain)
-                        .disabled(state.pendingPos == nil)
+                        .disabled(!canConfirmPulse)
                     }
 
                     Spacer(minLength: 4)

@@ -71,9 +71,13 @@
 		A30000000000000000000105 /* PuzzleModalLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000105 /* PuzzleModalLocator.swift */; };
 		A3000000000000000000010A /* KeyRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000010A /* KeyRecorderView.swift */; };
 		A30000000000000000000110 /* NXTModalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000110 /* NXTModalHelpers.swift */; };
+		A30000000000000000000111 /* WalkabilityCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000111 /* WalkabilityCache.swift */; };
+		A30000000000000000000112 /* BFSPathfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000112 /* BFSPathfinder.swift */; };
+		A30000000000000000000113 /* walkability.json in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000113 /* walkability.json */; };
 		B300000000000000000000A4 /* CelticKnotSolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A4 /* CelticKnotSolverTests.swift */; };
 		B300000000000000000000A8 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A8 /* Mocks.swift */; };
 		B300000000000000000000A9 /* ClueOrchestratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A9 /* ClueOrchestratorTests.swift */; };
+		B300000000000000000000B2 /* ScanOptimiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B2 /* ScanOptimiserTests.swift */; };
 		B300000000000000000000AA /* OrchestratorDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AA /* OrchestratorDependencies.swift */; };
 		B300000000000000000000AB /* SnipCoordinateMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AB /* SnipCoordinateMapper.swift */; };
 		B300000000000000000000AC /* CaptureErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AC /* CaptureErrorPresenter.swift */; };
@@ -190,10 +194,14 @@
 		A20000000000000000000105 /* PuzzleModalLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleModalLocator.swift; sourceTree = "<group>"; };
 		A2000000000000000000010A /* KeyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderView.swift; sourceTree = "<group>"; };
 		A20000000000000000000110 /* NXTModalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NXTModalHelpers.swift; sourceTree = "<group>"; };
+		A20000000000000000000111 /* WalkabilityCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkabilityCache.swift; sourceTree = "<group>"; };
+		A20000000000000000000112 /* BFSPathfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSPathfinder.swift; sourceTree = "<group>"; };
+		A20000000000000000000113 /* walkability.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = walkability.json; sourceTree = "<group>"; };
 		B200000000000000000000A0 /* Opt1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Opt1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B200000000000000000000A4 /* CelticKnotSolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotSolverTests.swift; sourceTree = "<group>"; };
 		B200000000000000000000A8 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		B200000000000000000000A9 /* ClueOrchestratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueOrchestratorTests.swift; sourceTree = "<group>"; };
+		B200000000000000000000B2 /* ScanOptimiserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOptimiserTests.swift; sourceTree = "<group>"; };
 		B200000000000000000000AA /* OrchestratorDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrchestratorDependencies.swift; sourceTree = "<group>"; };
 		B200000000000000000000AB /* SnipCoordinateMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnipCoordinateMapper.swift; sourceTree = "<group>"; };
 		B200000000000000000000AC /* CaptureErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureErrorPresenter.swift; sourceTree = "<group>"; };
@@ -321,6 +329,8 @@
 				A200000000000000000000CC /* PuzzleEmbeddingExtractor.swift */,
 				A200000000000000000000D7 /* CelticKnotDetector.swift */,
 				A20000000000000000000110 /* NXTModalHelpers.swift */,
+				A20000000000000000000111 /* WalkabilityCache.swift */,
+				A20000000000000000000112 /* BFSPathfinder.swift */,
 				B200000000000000000000B3 /* CelticKnotRuneClassification.swift */,
 				B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */,
 				P200000000000000000000A0 /* DetectionConfiguration+App.swift */,
@@ -364,6 +374,7 @@
 				A20000000000000000000102 /* SliderAnchors */,
 				A200000000000000000000E5 /* MapTiles */,
 				A200000000000000000000F8 /* teleports.json */,
+				A20000000000000000000113 /* walkability.json */,
 				A200000000000000000000F9 /* TeleportIcons */,
 			);
 			path = Resources;
@@ -508,6 +519,7 @@
 		B400000000000000000000A3 /* Detection */ = {
 			isa = PBXGroup;
 			children = (
+				B200000000000000000000B2 /* ScanOptimiserTests.swift */,
 			);
 			path = Detection;
 			sourceTree = "<group>";
@@ -622,6 +634,7 @@
 				A30000000000000000000102 /* SliderAnchors in Resources */,
 				A300000000000000000000DD /* MapTiles in Resources */,
 				A300000000000000000000F8 /* teleports.json in Resources */,
+				A30000000000000000000113 /* walkability.json in Resources */,
 				A300000000000000000000F9 /* TeleportIcons in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -661,6 +674,8 @@
 				A300000000000000000000CF /* PuzzleDataCollectionController.swift in Sources */,
 				A300000000000000000000D0 /* CelticKnotDetector.swift in Sources */,
 				A30000000000000000000110 /* NXTModalHelpers.swift in Sources */,
+				A30000000000000000000111 /* WalkabilityCache.swift in Sources */,
+				A30000000000000000000112 /* BFSPathfinder.swift in Sources */,
 				A300000000000000000000D1 /* CelticKnotDataCollectionController.swift in Sources */,
 				A30000000000000000000103 /* SliderAnchorCollectionController.swift in Sources */,
 				A30000000000000000000105 /* PuzzleModalLocator.swift in Sources */,
@@ -716,6 +731,7 @@
 				B300000000000000000000A4 /* CelticKnotSolverTests.swift in Sources */,
 				B300000000000000000000A8 /* Mocks.swift in Sources */,
 				B300000000000000000000A9 /* ClueOrchestratorTests.swift in Sources */,
+				B300000000000000000000B2 /* ScanOptimiserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
