@@ -77,7 +77,6 @@
 		B300000000000000000000A4 /* CelticKnotSolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A4 /* CelticKnotSolverTests.swift */; };
 		B300000000000000000000A8 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A8 /* Mocks.swift */; };
 		B300000000000000000000A9 /* ClueOrchestratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000A9 /* ClueOrchestratorTests.swift */; };
-		B300000000000000000000B2 /* ScanOptimiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B2 /* ScanOptimiserTests.swift */; };
 		B300000000000000000000AA /* OrchestratorDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AA /* OrchestratorDependencies.swift */; };
 		B300000000000000000000AB /* SnipCoordinateMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AB /* SnipCoordinateMapper.swift */; };
 		B300000000000000000000AC /* CaptureErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AC /* CaptureErrorPresenter.swift */; };
@@ -86,6 +85,7 @@
 		B300000000000000000000AF /* PuzzleBoxCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000AF /* PuzzleBoxCoordinator.swift */; };
 		B300000000000000000000B0 /* CelticKnotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B0 /* CelticKnotCoordinator.swift */; };
 		B300000000000000000000B1 /* AppSessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B1 /* AppSessionState.swift */; };
+		B300000000000000000000B2 /* ScanOptimiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B2 /* ScanOptimiserTests.swift */; };
 		B300000000000000000000B3 /* CelticKnotRuneClassification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B3 /* CelticKnotRuneClassification.swift */; };
 		B300000000000000000000B4 /* CelticKnotDebugRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */; };
 		B300000000000000000000B5 /* OverlayTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000000000000000000B5 /* OverlayTheme.swift */; };
@@ -201,7 +201,6 @@
 		B200000000000000000000A4 /* CelticKnotSolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotSolverTests.swift; sourceTree = "<group>"; };
 		B200000000000000000000A8 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		B200000000000000000000A9 /* ClueOrchestratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueOrchestratorTests.swift; sourceTree = "<group>"; };
-		B200000000000000000000B2 /* ScanOptimiserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOptimiserTests.swift; sourceTree = "<group>"; };
 		B200000000000000000000AA /* OrchestratorDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrchestratorDependencies.swift; sourceTree = "<group>"; };
 		B200000000000000000000AB /* SnipCoordinateMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnipCoordinateMapper.swift; sourceTree = "<group>"; };
 		B200000000000000000000AC /* CaptureErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureErrorPresenter.swift; sourceTree = "<group>"; };
@@ -210,6 +209,7 @@
 		B200000000000000000000AF /* PuzzleBoxCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleBoxCoordinator.swift; sourceTree = "<group>"; };
 		B200000000000000000000B0 /* CelticKnotCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotCoordinator.swift; sourceTree = "<group>"; };
 		B200000000000000000000B1 /* AppSessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSessionState.swift; sourceTree = "<group>"; };
+		B200000000000000000000B2 /* ScanOptimiserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOptimiserTests.swift; sourceTree = "<group>"; };
 		B200000000000000000000B3 /* CelticKnotRuneClassification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotRuneClassification.swift; sourceTree = "<group>"; };
 		B200000000000000000000B4 /* CelticKnotDebugRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelticKnotDebugRenderer.swift; sourceTree = "<group>"; };
 		B200000000000000000000B5 /* OverlayTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayTheme.swift; sourceTree = "<group>"; };
@@ -822,7 +822,7 @@
 				CODE_SIGN_ENTITLEMENTS = Opt1/Opt1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 2KFN672Z9S;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -837,7 +837,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
@@ -860,7 +860,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 2KFN672Z9S;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -875,7 +875,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacobhealey.opt1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
