@@ -47,15 +47,16 @@ struct RecommendedScanStep {
 /// 1. **Worst-case bucket** (`max(triple, double, single)`) — greedy minimax
 ///    primary criterion; minimises the most candidates that can survive after
 ///    one unlucky observation.
-/// 2. **Expected remaining** (`(T² + D² + S²) / n`) — information-theoretic
-///    tie-breaker; rewards balanced splits and maximises expected eliminations.
-/// 3. **Travel cost** — for non-teleport candidates this is BFS walking distance
+/// 2. **Travel cost** — for non-teleport candidates this is BFS walking distance
 ///    (or Chebyshev fallback) from the player's last known position. For teleport
 ///    candidates it is the fixed `teleportOverhead` constant (~15 tiles), since
-///    teleports are instant regardless of current position.
-/// 4. **Teleport preference** — when two candidates share the same travel cost
-///    (e.g. two teleport destinations), a teleport beats a plain grid point as a
-///    last-resort tie-breaker.
+///    teleports are instant regardless of current position.  Travel cost is the
+///    universal second priority: within the tolerance window, always go to the
+///    closest useful position rather than a theoretically better but distant one.
+/// 3. **Teleport preference** — when two candidates share the same travel cost,
+///    a teleport beats a plain grid point.
+/// 4. **Expected remaining** (`(T² + D² + S²) / n`) — information-theoretic
+///    final tiebreaker; rewards balanced splits only when everything else is equal.
 ///
 /// ## Tolerance window
 /// The travel-cost ranking is only applied within candidates whose
@@ -63,9 +64,11 @@ struct RecommendedScanStep {
 /// minimum. This prevents a near-optimal but distant position from winning
 /// over a slightly-less-optimal one that is much closer.
 ///
-/// ## Sea filtering
-/// Grid-point candidates whose map pixels match the RS3 wiki sea colour are
-/// discarded before scoring, preventing recommendations in open water.
+/// ## Sea / obstacle filtering
+/// Grid-point candidates are filtered using the walkability grid when one has
+/// been baked for the region (preferred — catches all obstacle types including
+/// sea, walls, and buildings).  When no grid is available the fallback is the
+/// pixel-colour sea check against the RS3 wiki sea colour.
 ///
 /// ## Candidate pool
 /// Two sources of candidate positions are evaluated:
@@ -104,20 +107,23 @@ enum ScanOptimiser {
     private struct CandidateScore: Comparable {
         /// Minimax worst-case bucket size. Primary criterion.
         let worstBucket: Int
-        /// Information-theoretic expected candidates remaining = (T²+D²+S²)/n.
-        /// Penalises unbalanced splits; rewards maximum expected eliminations.
-        let expectedRemaining: Double
+        /// Walking distance from the player's last known position (or
+        /// `teleportOverhead` for teleport candidates). Always the second
+        /// priority: within the tolerance window, go to the closest useful
+        /// position rather than a theoretically better but distant one.
+        let travelCost: Int
         /// 0 for a teleport destination (preferred), 1 for a plain grid point.
         let notTeleport: Int
-        /// Walking distance from the player's last known position.
-        /// 0 when no player position is supplied.
-        let travelCost: Int
+        /// Information-theoretic expected candidates remaining = (T²+D²+S²)/n.
+        /// Final tiebreaker only — rewards balanced splits when everything else
+        /// is equal.
+        let expectedRemaining: Double
 
         static func < (lhs: Self, rhs: Self) -> Bool {
-            (lhs.worstBucket, lhs.expectedRemaining,
-             lhs.travelCost,  lhs.notTeleport)
-            < (rhs.worstBucket, rhs.expectedRemaining,
-               rhs.travelCost,  rhs.notTeleport)
+            if lhs.worstBucket    != rhs.worstBucket    { return lhs.worstBucket    < rhs.worstBucket    }
+            if lhs.travelCost     != rhs.travelCost     { return lhs.travelCost     < rhs.travelCost     }
+            if lhs.notTeleport    != rhs.notTeleport    { return lhs.notTeleport    < rhs.notTeleport    }
+            return lhs.expectedRemaining < rhs.expectedRemaining
         }
     }
 
@@ -174,10 +180,12 @@ enum ScanOptimiser {
         let yMin = yLow  - margin
         let yMax = yHigh + margin
 
+        let disabled = AppSettings.disabledScanTeleportIds
         let nearTeleports = TeleportCatalogue.shared
             .spots(forMapId: mapId, plane: plane)
             .filter { $0.x >= xLow - range && $0.x <= xHigh + range
-                   && $0.y >= yLow - range && $0.y <= yHigh + range }
+                   && $0.y >= yLow - range && $0.y <= yHigh + range
+                   && !disabled.contains($0.id) }
 
         // Build the candidate pool.
         var candidates: [(x: Int, y: Int, teleport: TeleportSpot?)] = []
@@ -187,7 +195,18 @@ enum ScanOptimiser {
             candidates.append((t.x, t.y, t))
         }
 
-        // Grid, skipping tiles already well-covered by a teleport and sea tiles.
+        // Pre-compute BFS distance map from playerPos when a walkability grid
+        // is available for this region. Falls back to Chebyshev otherwise.
+        let walkGrid = WalkabilityCache.shared.grid(
+            forMapId: mapId, xMin: xMin, yMin: yMin, xMax: xMax, yMax: yMax)
+        let bfsDist: [Int]? = playerPos.flatMap { pos in
+            guard let g = walkGrid else { return nil }
+            return BFSPathfinder.distanceMap(from: pos, over: g)
+        }
+
+        // Grid, skipping tiles already well-covered by a teleport and obstacle tiles.
+        // Prefer the walkability grid (accurate for all terrain) over the sea-colour
+        // pixel check; fall back to the sea check when no grid has been baked yet.
         var seaChecker = MapTileCache.SeaChecker()
         var gx = xMin
         while gx <= xMax {
@@ -196,9 +215,12 @@ enum ScanOptimiser {
                 let suppressedByTeleport = nearTeleports.contains {
                     max(abs($0.x - gx), abs($0.y - gy)) <= teleportExclusionRadius
                 }
-                if !suppressedByTeleport,
-                   !seaChecker.isSea(gameX: gx, gameY: gy, mapId: mapId) {
-                    candidates.append((gx, gy, nil))
+                if !suppressedByTeleport {
+                    let passable = walkGrid.map { $0.isWalkable(gameX: gx, gameY: gy) }
+                        ?? !seaChecker.isSea(gameX: gx, gameY: gy, mapId: mapId)
+                    if passable {
+                        candidates.append((gx, gy, nil))
+                    }
                 }
                 gy += gridStep
             }
@@ -208,15 +230,6 @@ enum ScanOptimiser {
         guard !candidates.isEmpty else { return nil }
 
         let n = survivingCoords.count
-
-        // Pre-compute BFS distance map from playerPos when a walkability grid
-        // is available for this region. Falls back to Chebyshev otherwise.
-        let walkGrid = WalkabilityCache.shared.grid(
-            forMapId: mapId, xMin: xMin, yMin: yMin, xMax: xMax, yMax: yMax)
-        let bfsDist: [Int]? = playerPos.flatMap { pos in
-            guard let g = walkGrid else { return nil }
-            return BFSPathfinder.distanceMap(from: pos, over: g)
-        }
 
         // MARK: Scoring helper
 
@@ -271,9 +284,9 @@ enum ScanOptimiser {
             )
             let cs = CandidateScore(
                 worstBucket:       worst,
-                expectedRemaining: expRem,
+                travelCost:        travelCost,
                 notTeleport:       c.teleport == nil ? 1 : 0,
-                travelCost:        travelCost
+                expectedRemaining: expRem
             )
             return (step, cs)
         }

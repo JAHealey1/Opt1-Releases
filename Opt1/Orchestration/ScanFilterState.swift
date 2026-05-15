@@ -119,6 +119,13 @@ final class ScanFilterState: ObservableObject {
         updateRecommendation()
     }
 
+    /// Re-runs the recommendation from the current surviving set without
+    /// recording a new observation. Call this when user preferences change
+    /// mid-session — e.g. after the user disables a teleport.
+    func refreshRecommendation() {
+        updateRecommendation()
+    }
+
     // MARK: - Filter computation
 
     private func recompute() {
