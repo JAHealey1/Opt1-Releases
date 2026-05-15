@@ -234,6 +234,16 @@ struct ClueScrollDetector {
     /// that mention "clue scroll" are always much longer.
     private static let maxTitleLength: Int = 35
 
+    /// Words that only appear in chat/UI text about clue scrolls (e.g. the
+    /// Charos' carrier notification "Sealed clue scroll (elite)"), never in
+    /// the actual decorative title rendered inside the scroll modal.
+    /// If any of these are present the observation is rejected as a title
+    /// candidate before the keyword checks run.
+    private static let titleDenyList: [String] = [
+        "SEALED", "ELITE", "HARD", "MEDIUM", "EASY", "MASTER",
+        "CARRIER", "BACKPACK", "TRAILS",
+    ]
+
     /// Checks whether a single text observation looks like a clue scroll title.
     ///
     /// Uses two tiers:
@@ -251,13 +261,21 @@ struct ClueScrollDetector {
             .replacingOccurrences(of: "5", with: "S")
             .replacingOccurrences(of: "0", with: "O")
 
+        // Reject chat/UI fragments that mention clue scrolls contextually
+        // (e.g. "Sealed clue scroll (elite)" from the Charos carrier message,
+        // or "Treasure Trails" from the scan overlay) — none of these words
+        // ever appear in the actual decorative scroll title.
+        for denied in titleDenyList where u.contains(denied) { return false }
+
         // Tier 1: substring checks (fast path for clean reads)
         let hasClue = u.contains("CLUE")
         let hasMysterious = u.contains("MYSTERIOUS") || u.contains("MYS")
         let hasScroll = u.contains("SCROLL")
 
         if hasClue && (hasMysterious || hasScroll) { return true }
-        if u.contains("TREASURE") { return true }
+        // Require TREASURE + MAP together — bare "TREASURE" is too broad
+        // ("Treasure Trails" appears in the scan overlay and chat).
+        if u.contains("TREASURE") && u.contains("MAP") { return true }
 
         // Tier 2: Levenshtein distance for heavily garbled title text.
         // The decorative font often causes OCR to merge/substitute multiple

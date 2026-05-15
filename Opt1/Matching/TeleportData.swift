@@ -89,25 +89,40 @@ final class TeleportCatalogue {
     // MARK: - Coordinate offsets for local-coordinate underground maps
 
     /// Global tile offset to add to a local map coordinate to get the
-    /// equivalent global RS3 tile coordinate.
+    /// equivalent global RS3 tile coordinate, for single-floor underground maps.
     ///
     /// Certain underground maps store scan clue coordinates in a local tile
     /// space that starts near (0, 0), while the teleport catalogue uses the
     /// global tile grid. Adding this offset converts local → global; subtracting
     /// converts global → local.
     ///
-    /// Offsets are multiples of 64 (map-square boundaries). Each was derived
-    /// by matching a known teleport landing tile to its local coordinate:
-    /// — Keldagrim (mapId 21): local (40, 149) ≡ global (2856, 10197),
-    ///   confirmed via the Luck of the Dwarves landing tile.
-    /// — Dorgesh-Kaan (mapId 26): offset (2688, 5248) = (42×64, 82×64).
-    ///   Confirmed by matching 12/20 scan-clue spots between the RS3 wiki's
-    ///   local coordinate system (used by clues.json) and ClueTrainer's global
-    ///   RS3 game-tile coordinates. The two datasets share different subsets of
-    ///   spots, but the 12 that overlap all agree on this offset.
+    /// Offsets are multiples of 64 (map-square boundaries). Keldagrim (mapId 21)
+    /// was confirmed by matching local (40, 149) ≡ global (2856, 10197) via the
+    /// Luck of the Dwarves landing tile.
+    ///
+    /// Multi-floor underground maps whose wiki representation places each floor
+    /// at a different x-position are listed in `localMapFloorOffsets` instead.
     static let localMapGlobalOffset: [Int: (x: Int, y: Int)] = [
-        21: (x: 2816, y: 10048),   // Keldagrim underground
-        26: (x: 2688, y: 5248),    // Dorgesh-Kaan underground
+        21: (x: 2816, y: 10048),   // Keldagrim underground (single floor)
+    ]
+
+    /// Per-floor global offsets for underground maps whose wiki local coordinate
+    /// system displays each floor at a distinct x-position to avoid overlap.
+    ///
+    /// Dorgesh-Kaan (mapId 26) shows both floors side-by-side:
+    ///   • Level 0 (ground floor, left section):  offset (2688, 5248)
+    ///   • Level 1 (upper floor,  right section): offset (2592, 5184)
+    /// Both offsets were confirmed by matching all 20 scan-clue spots between
+    /// the RS3 wiki local coordinate system (used by clues.json) and ClueTrainer's
+    /// global RS3 game-tile coordinates — 12/20 matched the level-0 offset and
+    /// 8/20 matched the level-1 offset, accounting for every spot with no overlap.
+    /// Note: the wiki shifts floor 1 by 96 tiles in x and 64 in y (non-standard
+    /// values that happen not to be multiples of 64).
+    static let localMapFloorOffsets: [Int: [Int: (x: Int, y: Int)]] = [
+        26: [   // Dorgesh-Kaan underground
+            0: (x: 2688, y: 5248),  // ground floor — left section of wiki map
+            1: (x: 2592, y: 5184),  // upper floor  — right section of wiki map
+        ],
     ]
 
     // MARK: - Spot queries
@@ -120,12 +135,14 @@ final class TeleportCatalogue {
     ///   space that the map uses. **All elevation planes are included** because
     ///   the 2D map overlay collapses floors onto the same grid (e.g. Prifddinas
     ///   clan districts sit at plane 1 but appear on the standard surface map).
-    /// • For known underground local-coordinate maps (e.g. Keldagrim, mapId 21)
-    ///   the global teleport coordinates are **translated to local coords** by
-    ///   subtracting the map's known offset, so callers (map renderer, optimiser)
-    ///   can work in a single consistent coordinate space without special-casing.
-    ///   The `plane` parameter is applied here because underground floors are
-    ///   genuinely distinct areas.
+    /// • For single-floor underground maps (e.g. Keldagrim, mapId 21) the global
+    ///   teleport coordinates are **translated to local coords** by subtracting the
+    ///   map's known offset. The `plane` parameter is applied so only teleports on
+    ///   that floor are included.
+    /// • For multi-floor underground maps (e.g. Dorgesh-Kaan, mapId 26) each floor
+    ///   has its own offset because the wiki displays floors side-by-side at
+    ///   distinct x-positions. All floors are included; each spot is translated
+    ///   using the offset registered for its level.
     /// • Only spots whose translated position falls within a generous bounding
     ///   box around the map's local origin are returned, which naturally excludes
     ///   unrelated surface teleports from appearing on underground maps.
@@ -133,11 +150,30 @@ final class TeleportCatalogue {
         let arcMapId           = 695
         let arcYThreshold      = 140 * 64   // ~8960 — separates Arc from surface
 
+        // Multi-floor underground map: each level has its own display offset.
+        if let floorOffsets = Self.localMapFloorOffsets[mapId] {
+            return spots.compactMap { spot in
+                guard let offset = floorOffsets[spot.level] else { return nil }
+                let localX = spot.x - offset.x
+                let localY = spot.y - offset.y
+                guard localX > -512, localY > -512,
+                      localX < 2048, localY < 2048 else { return nil }
+                return TeleportSpot(
+                    groupId:   spot.groupId,
+                    groupName: spot.groupName,
+                    spotId:    spot.spotId,
+                    name:      spot.name,
+                    icon:      spot.icon,
+                    x:         localX,
+                    y:         localY,
+                    level:     spot.level,
+                    code:      spot.code
+                )
+            }
+        }
+
+        // Single-floor underground map: one shared offset, filtered by plane.
         if let offset = Self.localMapGlobalOffset[mapId] {
-            // Underground local-coordinate map: translate global → local and
-            // keep only spots that land within a plausible local range.
-            // The plane filter is retained here because different floors in
-            // an underground region genuinely occupy different spaces.
             return spots.compactMap { spot in
                 guard spot.level == plane else { return nil }
                 let localX = spot.x - offset.x
