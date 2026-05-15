@@ -23,7 +23,7 @@ struct SettingsView: View {
 
     // Backed by the same UserDefaults key AppSettings uses so non-SwiftUI
     // readers (logging, detection pipeline, etc.) see the same value.
-    @AppStorage(AppSettings.Keys.debugMode) private var debugEnabled: Bool = false
+    @AppStorage(AppSettings.Keys.debugMode) private var debugEnabled: Bool = true
     @AppStorage(AppSettings.Keys.puzzleGuidanceSpeed) private var guidanceSpeed: Double = AppSettings.defaultPuzzleGuidanceSpeed
     @AppStorage(AppSettings.Keys.puzzleUIScale) private var puzzleUIScale: Int = AppSettings.defaultPuzzleUIScale
     // Default-on; matches `AppSettings.areTeleportsShown`.
