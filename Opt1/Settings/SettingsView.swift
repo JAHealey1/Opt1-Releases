@@ -51,6 +51,9 @@ struct SettingsView: View {
     @State private var solveBinding:  HotkeyBinding = AppSettings.shared.solveHotkey
     @State private var puzzleBinding: HotkeyBinding = AppSettings.shared.puzzleHotkey
     @State private var hotkeyResetConfirmed = false
+    // Teleports the user has excluded from scan next-spot recommendations.
+    // Refreshed on appear and after each removal so the list stays current.
+    @State private var disabledScanTeleports: [TeleportSpot] = []
 
     @ObservedObject var navigation: SettingsNavigationModel
     /// Invoked when the user clicks "Calibrate triangulation points". Owned
@@ -125,6 +128,13 @@ struct SettingsView: View {
 
     private func formatPoint(set: Bool, x: Int, y: Int) -> String {
         set ? "(\(x), \(y))" : "Not set"
+    }
+
+    private func refreshDisabledScanTeleports() {
+        let ids = AppSettings.disabledScanTeleportIds
+        disabledScanTeleports = TeleportCatalogue.shared.spots
+            .filter { ids.contains($0.id) }
+            .sorted { $0.name < $1.name }
     }
 
     private var guidanceIntervalMilliseconds: Int {
@@ -437,6 +447,62 @@ struct SettingsView: View {
                         .padding(.horizontal, 4)
                 }
 
+                // MARK: Scan Teleports
+                ThemedSection(header: "Scan Teleports") {
+                    if disabledScanTeleports.isEmpty {
+                        Text("No teleports excluded.")
+                            .font(.body)
+                            .foregroundStyle(OverlayTheme.textSecondary)
+                    } else {
+                        ForEach(disabledScanTeleports, id: \.id) { spot in
+                            VStack(spacing: 0) {
+                                if spot.id != disabledScanTeleports.first?.id {
+                                    ThemedDivider()
+                                }
+                                HStack(spacing: 10) {
+                                    if let iconName = spot.resolvedIcon,
+                                       let cg = TeleportSpriteCache.shared.image(named: iconName) {
+                                        Image(nsImage: NSImage(cgImage: cg, size: NSSize(width: 18, height: 18)))
+                                            .frame(width: 18, height: 18)
+                                    } else {
+                                        Image(systemName: "arrow.triangle.2.circlepath")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                            .frame(width: 18, height: 18)
+                                    }
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(spot.name)
+                                            .font(.body)
+                                        Text(spot.groupName)
+                                            .font(.caption)
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                    }
+
+                                    Spacer()
+
+                                    Button {
+                                        AppSettings.enableScanTeleport(id: spot.id)
+                                        refreshDisabledScanTeleports()
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Re-enable \(spot.name)")
+                                    .accessibilityHint("Removes this teleport from the exclusion list so it can appear as a suggested scan position again.")
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+                } footer: {
+                    Text("Teleports excluded here won't appear as suggested scan positions. Use \"I don't have this teleport\" in the scan overlay to add entries, or remove them here to re-enable.")
+                        .font(.caption)
+                        .foregroundStyle(OverlayTheme.textSecondary)
+                        .padding(.horizontal, 4)
+                }
+
                 // MARK: Diagnostics
                 ThemedSection(header: "Diagnostics") {
                     VStack(alignment: .leading, spacing: 0) {
@@ -516,6 +582,10 @@ struct SettingsView: View {
         .background(OverlayTheme.bgPrimary)
         .foregroundStyle(OverlayTheme.textPrimary)
         .navigationTitle("Opt1 Settings")
+        .onAppear { refreshDisabledScanTeleports() }
+        .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+            refreshDisabledScanTeleports()
+        }
     }
 }
 

@@ -160,6 +160,9 @@ final class AppSettings {
         // scanNextSpotEnabled defaults to false (absent key → disabled).
         static let slidePuzzleAutoDetect = "slidePuzzleAutoDetectEnabled"
         static let scanNextSpotEnabled   = "scanNextSpotGuidanceEnabled"
+        // Teleport IDs the user has opted out of seeing as scan recommendations.
+        // Stored as a [String] array; each entry is TeleportSpot.id ("<groupId>.<spotId>").
+        static let disabledScanTeleportIds = "disabledScanTeleportIds"
     }
 
     // MARK: - Debug mode
@@ -438,6 +441,35 @@ final class AppSettings {
     /// recommendation. Defaults to `false` (absent key → disabled).
     static var isScanNextSpotEnabled: Bool {
         UserDefaults.standard.bool(forKey: Keys.scanNextSpotEnabled)
+    }
+
+    // MARK: - Disabled scan teleports
+
+    /// IDs of teleport spots excluded from scan next-spot recommendations,
+    /// keyed by `TeleportSpot.id` (`"<groupId>.<spotId>"`).
+    /// Stored as a `[String]` array — UserDefaults natively round-trips these.
+    static var disabledScanTeleportIds: Set<String> {
+        get {
+            let arr = UserDefaults.standard.stringArray(forKey: Keys.disabledScanTeleportIds) ?? []
+            return Set(arr)
+        }
+        set {
+            UserDefaults.standard.set(Array(newValue), forKey: Keys.disabledScanTeleportIds)
+        }
+    }
+
+    /// Adds a teleport ID to the disabled-scan set.
+    static func disableScanTeleport(id: String) {
+        var ids = disabledScanTeleportIds
+        ids.insert(id)
+        disabledScanTeleportIds = ids
+    }
+
+    /// Removes a teleport ID from the disabled-scan set, re-enabling it.
+    static func enableScanTeleport(id: String) {
+        var ids = disabledScanTeleportIds
+        ids.remove(id)
+        disabledScanTeleportIds = ids
     }
 
     // MARK: - World-map overlays

@@ -14,8 +14,13 @@ public struct ClueSolution: Codable, Identifiable {
     public var imageRef: String?   // Base filename for bundled map clue images (MapImages/)
     public var travel: String?     // Travel suggestions, bullet-points joined with " • "
     public var confidence: Double? // Populated by FuzzyMatcher at query time
+    /// Alternate OCR text patterns for the compact scan parchment (small scroll).
+    /// The compact scroll uses different wording than the large scroll clue text,
+    /// so entries can supply known alternates (e.g. "The crater in the Wilderness"
+    /// for the Wilderness Crater scan) that the matcher checks before fuzzy fallback.
+    public var scanTextAliases: [String]?
 
-    public init(id: String, type: String, difficulty: String? = nil, clue: String, solution: String, location: String? = nil, coordinates: String? = nil, mapId: Int? = nil, imageRef: String? = nil, travel: String? = nil, confidence: Double? = nil) {
+    public init(id: String, type: String, difficulty: String? = nil, clue: String, solution: String, location: String? = nil, coordinates: String? = nil, mapId: Int? = nil, imageRef: String? = nil, travel: String? = nil, confidence: Double? = nil, scanTextAliases: [String]? = nil) {
         self.id = id
         self.type = type
         self.difficulty = difficulty
@@ -27,6 +32,7 @@ public struct ClueSolution: Codable, Identifiable {
         self.imageRef = imageRef
         self.travel = travel
         self.confidence = confidence
+        self.scanTextAliases = scanTextAliases
     }
 }
 

@@ -18,6 +18,9 @@ struct EliteCompassView: View {
     /// Cursor offset from the window's bottom-left corner, captured at drag start.
     /// Stored in AppKit screen coords (Y up) so it is unaffected by window movement.
     @State private var dragAnchorOffset: CGPoint? = nil
+    /// Local mirror of `AppSettings.disabledScanTeleportIds` so SwiftUI tracks
+    /// the dependency and re-renders when the user disables a teleport.
+    @State private var disabledTeleportIds: Set<String> = AppSettings.disabledScanTeleportIds
 
     /// Default map centre for surface (elite) compass clues — Lumbridge area.
     private static let defaultX = 3222
@@ -47,6 +50,7 @@ struct EliteCompassView: View {
     private var nearestTeleport: (spot: TeleportSpot, tiles: Double)? {
         guard let pt = state.intersection else { return nil }
         let spots = TeleportCatalogue.shared.spots(forMapId: MapTileCache.defaultMapId)
+            .filter { !disabledTeleportIds.contains($0.id) }
         let px = Double(pt.x), py = Double(pt.y)
         guard let closest = spots.min(by: {
             hypot(Double($0.x) - px, Double($0.y) - py) <
@@ -225,11 +229,27 @@ struct EliteCompassView: View {
 
                     Spacer()
 
-                    Text("\(Int(nearest.tiles.rounded())) tiles")
-                        .font(.system(size: 10, weight: .medium, design: .monospaced))
-                        .foregroundColor(OverlayTheme.textSecondary)
-                        .padding(.horizontal, 6).padding(.vertical, 2)
-                        .background(Capsule().fill(OverlayTheme.gold.opacity(0.12)))
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("\(Int(nearest.tiles.rounded())) tiles")
+                            .font(.system(size: 10, weight: .medium, design: .monospaced))
+                            .foregroundColor(OverlayTheme.textSecondary)
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(Capsule().fill(OverlayTheme.gold.opacity(0.12)))
+
+                        Button {
+                            AppSettings.disableScanTeleport(id: nearest.spot.id)
+                            disabledTeleportIds = AppSettings.disabledScanTeleportIds
+                        } label: {
+                            Text("I don't have this")
+                                .font(.system(size: 8))
+                                .foregroundColor(.white.opacity(0.5))
+                                .padding(.horizontal, 6).padding(.vertical, 2)
+                                .background(Capsule().fill(.white.opacity(0.08)))
+                                .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 0.5))
+                        }
+                        .buttonStyle(.plain)
+                        .help("Exclude this teleport from suggestions. Re-enable it in Settings → Scan Teleports.")
+                    }
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
@@ -260,6 +280,9 @@ struct EliteCompassView: View {
             RoundedRectangle(cornerRadius: OverlayTheme.cornerRadius, style: .continuous)
                 .strokeBorder(OverlayTheme.goldBorder.opacity(0.50), lineWidth: OverlayTheme.borderWidth)
         )
+        .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+            disabledTeleportIds = AppSettings.disabledScanTeleportIds
+        }
     }
 }
 

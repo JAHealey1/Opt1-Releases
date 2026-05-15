@@ -85,13 +85,48 @@ public struct FuzzyMatcher {
             return r.isEmpty ? nil : r
         }
 
+        // Build the location→group dictionary once; all strategies below reuse it.
+        let locationGroups = Dictionary(grouping: scanClues) { $0.location ?? "" }
+
+        // Strategy 0: explicit small-scroll alias match.
+        //
+        // The compact scan parchment (small scroll) uses different wording than
+        // the full large scroll clue text (e.g. "The crater in the Wilderness"
+        // vs "This scroll will work in the crater of the Wilderness volcano.").
+        // `scanRegionPart` can only strip the large-scroll boilerplate, so the
+        // compact text falls through to fuzzy strategies with poor results.
+        // Entries that carry `scanTextAliases` opt in to exact-containment
+        // matching here before any fuzzy comparison runs.
+        let aliasGroups: [String: [ClueSolution]] = {
+            var map: [String: [ClueSolution]] = [:]
+            for (location, group) in locationGroups {
+                guard !location.isEmpty else { continue }
+                for entry in group {
+                    for alias in entry.scanTextAliases ?? [] {
+                        let normAlias = normalise(alias)
+                        guard !normAlias.isEmpty else { continue }
+                        map[normAlias] = group
+                    }
+                }
+            }
+            return map
+        }()
+        for qr in queryRegions {
+            for (normAlias, group) in aliasGroups {
+                if qr.contains(normAlias) || normAlias.contains(qr) {
+                    let loc = group.first?.location ?? "?"
+                    print("[FuzzyMatcher] Scan alias match: '\(loc)' via alias '\(normAlias)' in '\(qr)'")
+                    return group
+                }
+            }
+        }
+
         // Strategy 1: location-name containment (both directions)
         //
         // Forward:  query contains the full location name  → e.g. query has "zanaris" in it
         // Reverse:  location name contains the query       → e.g. OCR captured only "Grand
         //           Exchange" or only "Varrock" but the full location is "Varrock and the
         //           Grand Exchange". Guard on query length ≥ 7 to avoid matching common words.
-        let locationGroups = Dictionary(grouping: scanClues) { $0.location ?? "" }
         for (location, group) in locationGroups {
             guard !location.isEmpty else { continue }
             let normLocation = normalise(location)
@@ -100,7 +135,7 @@ public struct FuzzyMatcher {
                     print("[FuzzyMatcher] Scan location match: '\(location)' found in '\(qr)'")
                     return group
                 }
-                if qr.count >= 7, normLocation.contains(qr) {
+                if qr.count >= 7, qr.contains(" "), normLocation.contains(qr) {
                     print("[FuzzyMatcher] Scan reverse-containment match: '\(location)' contains '\(qr)'")
                     return group
                 }

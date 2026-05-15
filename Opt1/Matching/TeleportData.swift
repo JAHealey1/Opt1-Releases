@@ -100,8 +100,14 @@ final class TeleportCatalogue {
     /// by matching a known teleport landing tile to its local coordinate:
     /// — Keldagrim (mapId 21): local (40, 149) ≡ global (2856, 10197),
     ///   confirmed via the Luck of the Dwarves landing tile.
+    /// — Dorgesh-Kaan (mapId 26): offset (2688, 5248) = (42×64, 82×64).
+    ///   Confirmed by matching 12/20 scan-clue spots between the RS3 wiki's
+    ///   local coordinate system (used by clues.json) and ClueTrainer's global
+    ///   RS3 game-tile coordinates. The two datasets share different subsets of
+    ///   spots, but the 12 that overlap all agree on this offset.
     static let localMapGlobalOffset: [Int: (x: Int, y: Int)] = [
         21: (x: 2816, y: 10048),   // Keldagrim underground
+        26: (x: 2688, y: 5248),    // Dorgesh-Kaan underground
     ]
 
     // MARK: - Spot queries

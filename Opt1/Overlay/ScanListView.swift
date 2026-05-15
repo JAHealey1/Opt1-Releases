@@ -137,33 +137,29 @@ struct ScanListView: View {
 
             // ── Recommendation row ────────────────────────────────────────
             if let step = state.recommendedStep {
-                HStack(spacing: 6) {
-                    Image(systemName: step.isTeleport
-                          ? "arrow.triangle.2.circlepath"
-                          : "mappin.circle")
-                        .font(.system(size: 10))
-                        .foregroundColor(OverlayTheme.gold.opacity(0.85))
+                if let t = step.teleport {
+                    ScanTeleportNextRow(teleport: t) {
+                        AppSettings.disableScanTeleport(id: t.id)
+                        state.refreshRecommendation()
+                    }
+                } else {
+                    HStack(spacing: 6) {
+                        Image(systemName: "mappin.circle")
+                            .font(.system(size: 10))
+                            .foregroundColor(OverlayTheme.gold.opacity(0.85))
 
-                    Text("Next:")
-                        .font(.system(size: 9))
-                        .foregroundColor(.white.opacity(0.4))
+                        Text("Next:")
+                            .font(.system(size: 9))
+                            .foregroundColor(.white.opacity(0.4))
 
-                    if let t = step.teleport {
-                        Text(t.name)
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundColor(OverlayTheme.gold.opacity(0.95))
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    } else {
                         Text("(\(step.x), \(step.y))")
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundColor(.white.opacity(0.75))
                     }
-
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 5)
+                    .background(OverlayTheme.gold.opacity(0.06))
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 5)
-                .background(OverlayTheme.gold.opacity(0.06))
 
                 Divider().opacity(0.20)
             }
@@ -288,5 +284,63 @@ struct ScanListView: View {
         case .double: return Color(red: 1.0,  green: 0.55, blue: 0.10)  // orange
         case .triple: return Color(red: 0.92, green: 0.24, blue: 0.20)  // red
         }
+    }
+}
+
+// MARK: - Teleport recommendation row
+
+/// Compact row shown in the scan overlay when the next suggested position is a
+/// known teleport destination. Displays the teleport sprite, name, and group,
+/// and provides a button to exclude the teleport from future recommendations.
+private struct ScanTeleportNextRow: View {
+    let teleport: TeleportSpot
+    let onDisable: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            if let iconName = teleport.resolvedIcon,
+               let cg = TeleportSpriteCache.shared.image(named: iconName) {
+                Image(nsImage: NSImage(cgImage: cg, size: NSSize(width: 16, height: 16)))
+                    .frame(width: 16, height: 16)
+            } else {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 10))
+                    .foregroundColor(OverlayTheme.gold.opacity(0.85))
+                    .frame(width: 16, height: 16)
+            }
+
+            Text("Next:")
+                .font(.system(size: 9))
+                .foregroundColor(.white.opacity(0.4))
+
+            VStack(alignment: .leading, spacing: 1) {
+                Text(teleport.name)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(OverlayTheme.gold.opacity(0.95))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                Text(teleport.groupName)
+                    .font(.system(size: 8, design: .monospaced))
+                    .foregroundColor(OverlayTheme.textSecondary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+
+            Spacer(minLength: 4)
+
+            Button(action: onDisable) {
+                Text("I don't have this")
+                    .font(.system(size: 8))
+                    .foregroundColor(.white.opacity(0.5))
+                    .padding(.horizontal, 6).padding(.vertical, 2)
+                    .background(Capsule().fill(.white.opacity(0.08)))
+                    .overlay(Capsule().strokeBorder(.white.opacity(0.12), lineWidth: 0.5))
+            }
+            .buttonStyle(.plain)
+            .help("Exclude this teleport from scan spot recommendations. You can re-enable it in Settings → Scan Teleports.")
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(OverlayTheme.gold.opacity(0.06))
     }
 }
