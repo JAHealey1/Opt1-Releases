@@ -581,7 +581,7 @@ struct RSWorldMapView: View {
         let mid = line.bearing.bearingRadians
         let eps = line.bearing.epsilonRadians
 
-        let extent = max(size.width, size.height) * 2
+        let extent: CGFloat = 50_000  // large enough to cross the viewport at any zoom level
 
         // Centerline (always)
         let dxC =  sin(mid)

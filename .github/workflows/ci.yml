@@ -65,7 +65,7 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Test
+      - name: Test (Opt1)
         run: |
           xcodebuild test \
             -project Opt1.xcodeproj \
@@ -75,3 +75,7 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Test (Opt1CoreLibraries)
+        working-directory: Opt1CoreLibraries
+        run: swift test --parallel
