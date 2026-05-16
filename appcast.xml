@@ -6,16 +6,16 @@
     <description>Most recent updates to Opt1.</description>
     <language>en</language>
     <item>
-      <title>Version 1.0.4</title>
-      <pubDate>Mon, 11 May 2026 11:40:41 +0000</pubDate>
-      <sparkle:version>5</sparkle:version>
-      <sparkle:shortVersionString>1.0.4</sparkle:shortVersionString>
+      <title>Version 1.0.5</title>
+      <pubDate>Sat, 16 May 2026 23:09:53 +0000</pubDate>
+      <sparkle:version>6</sparkle:version>
+      <sparkle:shortVersionString>1.0.5</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <description><![CDATA[<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Opt1 1.0.4 release notes</title>
+  <title>Opt1 1.0.5 release notes</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
            font-size: 13px; line-height: 1.5; padding: 12px; }
@@ -30,14 +30,64 @@
   </style>
 </head>
 <body>
-<h1>Opt1 1.0.4</h1>
+<h1>Opt1 1.0.5</h1>
 <h2>What's new</h2>
 <ul>
-<li>First public release</li>
+<li>Added the ability to add custom keybind instructions for all teleports.</li>
+<li>Added the ability to mark a teleport item as not owned so it will not be suggested.</li>
+<li>Debug mode is now on by default. You can opt out in settings.</li>
+<li>Compass intersection now snaps to known dig spot if there is only one within range.</li>
+<li>Improved scan guidance by adding pathing information to the scan optimiser (experimental).</li>
+<li>Scan guidance UI (experimental) now shows teleport information if next spot is a teleport.</li>
+<li>Opt1 is now open-source.</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li>Compass beams are no longer hidden when the map is zoomed in.</li>
+<li>Fixed erroneous matches of 'treasure' in chat log text as clue scroll title</li>
+<li>Fixed wilderness crater scan matching against deep wilderness scan</li>
+<li>Added some missing teleports to dorgesh-kaan</li>
+<li>Added validation of OCR'd scan range for scan clues to prevent inaccurate scan guidance</li>
 </ul>
 </body>
 </html>
 ]]></description>
+      <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
+      <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.5/Opt1-1.0.5.dmg" sparkle:edSignature="uHEnXdjMJ9SI6WEg/yGKqgvdsUZyU+M+G33dq295Of0u4YRe5kCy9AOxZlAPUr/a5LI3C3PmhnRiZtAL0fuaDQ==" length="86895632" type="application/octet-stream" />
+    </item>
+    <item>
+      <title>Version 1.0.4</title>
+      <pubDate>Mon, 11 May 2026 11:40:41 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>1.0.4</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Opt1 1.0.4 release notes&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+           font-size: 13px; line-height: 1.5; padding: 12px; }
+    h1, h2, h3 { margin-top: 1em; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+           background: rgba(127,127,127,0.15); padding: 1px 4px;
+           border-radius: 3px; }
+    pre code { display: block; padding: 8px; }
+    ul, ol { padding-left: 1.5em; }
+    a { color: #0a84ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Opt1 1.0.4&lt;/h1&gt;
+&lt;h2&gt;What's new&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;First public release&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</description>
       <sparkle:fullReleaseNotesLink>https://github.com/JAHealey1/Opt1-Releases/releases</sparkle:fullReleaseNotesLink>
       <enclosure url="https://github.com/JAHealey1/Opt1-Releases/releases/download/v1.0.4/Opt1-1.0.4.dmg" sparkle:edSignature="3af9i+++EQzwfKrx8K6oNQhJT5lwYJMd0n4hAdNvqmw/nN3yA/vFXOXIdC/N8aZwN9DgzOqcgqvHXKEnaVyHDQ==" length="86673558" type="application/octet-stream" />
     </item>
