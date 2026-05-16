@@ -237,19 +237,36 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RELEASES_REPO_PAT }}
         run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          # Unique branch: rulesets often block direct pushes to main; open a PR
+          # and merge with --admin so required checks / PR rules do not block.
+          BRANCH="bot/appcast-v${VERSION}-${{ github.run_id }}"
+
           git config user.name  "Opt1 release bot"
           git config user.email "actions@users.noreply.github.com"
-          # Re-authenticate the remote with the PAT so the push is treated as
-          # a repo-admin push and bypasses the branch protection rules on main.
           git remote set-url origin \
-            https://x-access-token:${GH_TOKEN}@github.com/JAHealey1/Opt1.git
+            "https://x-access-token:${GH_TOKEN}@github.com/JAHealey1/Opt1.git"
+
           git add appcast.xml
           if git diff --staged --quiet; then
             echo "No appcast changes to commit (re-run on same version?)."
-          else
-            git commit -m "Release v${{ steps.version.outputs.version }}"
-            git push origin HEAD:main
+            exit 0
           fi
+
+          git commit -m "Release v${VERSION}"
+          git checkout -b "$BRANCH"
+          git push -u origin "$BRANCH"
+
+          gh pr create \
+            --repo JAHealey1/Opt1 \
+            --base main \
+            --head "$BRANCH" \
+            --title "Release v${VERSION} (appcast)" \
+            --body "Automated appcast update for Opt1 v${VERSION}."
+
+          PR_NUM="$(gh pr list --repo JAHealey1/Opt1 --head "$BRANCH" --json number --jq '.[0].number')"
+          gh pr merge "$PR_NUM" --repo JAHealey1/Opt1 --merge --admin --delete-branch
 
       - name: Create GitHub Release
         env:
