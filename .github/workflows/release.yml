@@ -235,10 +235,14 @@ jobs:
 
       - name: Commit + push appcast
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASES_REPO_PAT }}
         run: |
           git config user.name  "Opt1 release bot"
           git config user.email "actions@users.noreply.github.com"
+          # Re-authenticate the remote with the PAT so the push is treated as
+          # a repo-admin push and bypasses the branch protection rules on main.
+          git remote set-url origin \
+            https://x-access-token:${GH_TOKEN}@github.com/JAHealey1/Opt1.git
           git add appcast.xml
           if git diff --staged --quiet; then
             echo "No appcast changes to commit (re-run on same version?)."
