@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 import ImageIO
+import Opt1Matching
 import Vision
 
 /// Detects the clue scroll interface in a captured RuneScape frame.
@@ -282,7 +283,7 @@ struct ClueScrollDetector {
         // characters, breaking substring checks entirely.
         guard u.count >= 10 else { return false }
         for target in titleTargets {
-            let dist = levenshtein(u, target)
+            let dist = LevenshteinDistance.unicodeScalars(u, target)
             let ratio = Double(dist) / Double(max(u.count, target.count))
             if ratio <= maxEditDistanceRatio { return true }
         }
@@ -638,29 +639,6 @@ struct ClueScrollDetector {
         return false
     }
 
-    // MARK: - Levenshtein Distance
-
-    /// Standard dynamic-programming edit distance (insert/delete/substitute).
-    private static func levenshtein(_ a: String, _ b: String) -> Int {
-        let a = Array(a), b = Array(b)
-        let m = a.count, n = b.count
-        if m == 0 { return n }
-        if n == 0 { return m }
-
-        var prev = Array(0...n)
-        var curr = [Int](repeating: 0, count: n + 1)
-
-        for i in 1...m {
-            curr[0] = i
-            for j in 1...n {
-                let cost = a[i - 1] == b[j - 1] ? 0 : 1
-                curr[j] = min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost)
-            }
-            swap(&prev, &curr)
-        }
-        return prev[n]
-    }
-
     // MARK: - Debug Output
 
     private func saveDebugOutput(
@@ -744,7 +722,7 @@ struct ClueScrollDetector {
                 .replacingOccurrences(of: "5", with: "S")
                 .replacingOccurrences(of: "0", with: "O")
             let distances = Self.titleTargets.map { target -> String in
-                let dist = Self.levenshtein(normalized, target)
+                let dist = LevenshteinDistance.unicodeScalars(normalized, target)
                 let ratio = Double(dist) / Double(max(normalized.count, target.count))
                 return "\(target): dist=\(dist) ratio=\(String(format: "%.2f", ratio))"
             }

@@ -19,8 +19,11 @@ public struct ClueSolution: Codable, Identifiable {
     /// so entries can supply known alternates (e.g. "The crater in the Wilderness"
     /// for the Wilderness Crater scan) that the matcher checks before fuzzy fallback.
     public var scanTextAliases: [String]?
+    /// Known orb scan range in paces (scan clues only). Used to validate the
+    /// live OCR-detected range and fall back to this value when OCR is wrong.
+    public var scanRange: Int?
 
-    public init(id: String, type: String, difficulty: String? = nil, clue: String, solution: String, location: String? = nil, coordinates: String? = nil, mapId: Int? = nil, imageRef: String? = nil, travel: String? = nil, confidence: Double? = nil, scanTextAliases: [String]? = nil) {
+    public init(id: String, type: String, difficulty: String? = nil, clue: String, solution: String, location: String? = nil, coordinates: String? = nil, mapId: Int? = nil, imageRef: String? = nil, travel: String? = nil, confidence: Double? = nil, scanTextAliases: [String]? = nil, scanRange: Int? = nil) {
         self.id = id
         self.type = type
         self.difficulty = difficulty
@@ -33,6 +36,58 @@ public struct ClueSolution: Codable, Identifiable {
         self.travel = travel
         self.confidence = confidence
         self.scanTextAliases = scanTextAliases
+        self.scanRange = scanRange
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, type, difficulty, clue, solution, location, coordinates, mapId,
+             imageRef, travel, confidence, scanTextAliases, scanRange
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        type = try c.decode(String.self, forKey: .type)
+        difficulty = try c.decodeIfPresent(String.self, forKey: .difficulty)
+        clue = try c.decode(String.self, forKey: .clue)
+        solution = try c.decode(String.self, forKey: .solution)
+        location = try c.decodeIfPresent(String.self, forKey: .location)
+        coordinates = try c.decodeIfPresent(String.self, forKey: .coordinates)
+        mapId = try c.decodeIfPresent(Int.self, forKey: .mapId)
+        imageRef = try c.decodeIfPresent(String.self, forKey: .imageRef)
+        travel = try c.decodeIfPresent(String.self, forKey: .travel)
+        confidence = try c.decodeIfPresent(Double.self, forKey: .confidence)
+        scanTextAliases = try c.decodeIfPresent([String].self, forKey: .scanTextAliases)
+        scanRange = try Self.decodeScanRange(from: c)
+    }
+
+    /// `clues.json` uses quoted scan ranges (`"22"`) in addition to numeric JSON.
+    private static func decodeScanRange(from c: KeyedDecodingContainer<CodingKeys>) throws -> Int? {
+        guard c.contains(.scanRange) else { return nil }
+        if try c.decodeNil(forKey: .scanRange) { return nil }
+        if let i = try? c.decode(Int.self, forKey: .scanRange) { return i }
+        if let s = try? c.decode(String.self, forKey: .scanRange) {
+            let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
+            return Int(t)
+        }
+        return nil
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(type, forKey: .type)
+        try c.encodeIfPresent(difficulty, forKey: .difficulty)
+        try c.encode(clue, forKey: .clue)
+        try c.encode(solution, forKey: .solution)
+        try c.encodeIfPresent(location, forKey: .location)
+        try c.encodeIfPresent(coordinates, forKey: .coordinates)
+        try c.encodeIfPresent(mapId, forKey: .mapId)
+        try c.encodeIfPresent(imageRef, forKey: .imageRef)
+        try c.encodeIfPresent(travel, forKey: .travel)
+        try c.encodeIfPresent(confidence, forKey: .confidence)
+        try c.encodeIfPresent(scanTextAliases, forKey: .scanTextAliases)
+        try c.encodeIfPresent(scanRange, forKey: .scanRange)
     }
 }
 

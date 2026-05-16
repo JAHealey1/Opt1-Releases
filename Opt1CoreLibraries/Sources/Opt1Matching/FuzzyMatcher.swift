@@ -536,23 +536,6 @@ public struct FuzzyMatcher {
         let bScalars = Array(b.unicodeScalars)
         let maxLen = max(aScalars.count, bScalars.count)
         guard maxLen > 0 else { return 1.0 }
-        return 1.0 - Double(levenshteinScalars(aScalars, bScalars)) / Double(maxLen)
-    }
-
-    private func levenshteinScalars(_ s: [Unicode.Scalar], _ t: [Unicode.Scalar]) -> Int {
-        let m = s.count, n = t.count
-        if m == 0 { return n }
-        if n == 0 { return m }
-        var prev = Array(0...n)
-        var curr = [Int](repeating: 0, count: n + 1)
-        for i in 1...m {
-            curr[0] = i
-            for j in 1...n {
-                let cost = s[i - 1] == t[j - 1] ? 0 : 1
-                curr[j] = Swift.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
-            }
-            swap(&prev, &curr)
-        }
-        return prev[n]
+        return 1.0 - Double(LevenshteinDistance.unicodeScalars(aScalars, bScalars)) / Double(maxLen)
     }
 }

@@ -224,6 +224,48 @@ struct ScanMatchingTests {
         )
     }
 
+    // MARK: - scanRange JSON decoding
+
+    @Test("All scan clues in the database have a non-nil scanRange")
+    func allScanCluesHaveScanRange() {
+        let scanClues = Self.allClues.filter { $0.type == "scan" }
+        #expect(!scanClues.isEmpty, "No scan clues found in database")
+        for clue in scanClues {
+            #expect(
+                clue.scanRange != nil,
+                "Scan clue for '\(clue.location ?? clue.id)' is missing scanRange"
+            )
+        }
+    }
+
+    /// Spot-check that known regions decode the exact range value from JSON.
+    /// Derived from the `largeScrollCases` prose (e.g. "Orb scan range: 22 paces.").
+    static let knownRangeCases: [(location: String, range: Int)] = [
+        ("Ardougne",              22),
+        ("Haunted Woods",         11),
+        ("Heart of Gielinor",     49),
+        ("Deep Wilderness",       25),
+        ("Menaphos",              30),
+        ("Keldagrim",             11),
+        ("Varrock",               16),
+        ("Wilderness Crater",     11),
+    ]
+
+    @Test(
+        "Known scan region decodes correct scanRange from database",
+        arguments: knownRangeCases
+    )
+    func knownScanRegionHasCorrectRange(location: String, expectedRange: Int) {
+        let clue = Self.allClues
+            .filter { $0.type == "scan" && $0.location == location }
+            .first
+        #expect(clue != nil, "No scan clue found for location '\(location)'")
+        #expect(
+            clue?.scanRange == expectedRange,
+            "Expected scanRange \(expectedRange) for '\(location)', got \(String(describing: clue?.scanRange))"
+        )
+    }
+
     // MARK: - All scan regions have at least one spot in the database
 
     @Test("Every known scan region has at least one spot loaded from clues.json")

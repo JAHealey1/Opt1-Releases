@@ -581,7 +581,19 @@ struct RSWorldMapView: View {
         let mid = line.bearing.bearingRadians
         let eps = line.bearing.epsilonRadians
 
-        let extent: CGFloat = 50_000  // large enough to cross the viewport at any zoom level
+        // Extent must be long enough to reach the viewport from the origin.
+        // When the bearing origin is off-screen (e.g. the user has panned or
+        // zoomed away from it), a fixed constant can fall short at high zoom
+        // levels. We compute the distance to the farthest viewport corner so
+        // the line is guaranteed to cross the visible area regardless of where
+        // the origin sits in screen space.
+        let farthestCorner = max(
+            hypot(originScreen.x,              originScreen.y),
+            hypot(originScreen.x - size.width, originScreen.y),
+            hypot(originScreen.x,              originScreen.y - size.height),
+            hypot(originScreen.x - size.width, originScreen.y - size.height)
+        )
+        let extent = max(50_000, farthestCorner * 1.1)
 
         // Centerline (always)
         let dxC =  sin(mid)

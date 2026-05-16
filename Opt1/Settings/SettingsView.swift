@@ -54,6 +54,12 @@ struct SettingsView: View {
     // Teleports the user has excluded from scan next-spot recommendations.
     // Refreshed on appear and after each removal so the list stays current.
     @State private var disabledScanTeleports: [TeleportSpot] = []
+    // Custom keybind pre-steps per group, refreshed from AppSettings on appear.
+    @State private var groupSteps: [String: [String]] = [:]
+    // Custom keybind pre-steps per individual spot (spellbooks etc.).
+    @State private var spotSteps:  [String: [String]] = [:]
+    // Tracks which teleport's keybind sheet is currently open in Settings.
+    @State private var keybindEditTarget: KeybindEditTarget? = nil
 
     @ObservedObject var navigation: SettingsNavigationModel
     /// Invoked when the user clicks "Calibrate triangulation points". Owned
@@ -135,6 +141,22 @@ struct SettingsView: View {
         disabledScanTeleports = TeleportCatalogue.shared.spots
             .filter { ids.contains($0.id) }
             .sorted { $0.name < $1.name }
+    }
+
+    private func refreshGroupSteps() {
+        groupSteps = AppSettings.teleportGroupSteps
+        spotSteps  = AppSettings.teleportSpotSteps
+    }
+
+    /// Resolves a groupId to the first matching TeleportSpot so we can read
+    /// `groupName` and `code` without needing a separate lookup structure.
+    private func spotForGroupId(_ groupId: String) -> TeleportSpot? {
+        TeleportCatalogue.shared.spots.first { $0.groupId == groupId }
+    }
+
+    /// Resolves a full TeleportSpot.id to the matching spot.
+    private func spotForSpotId(_ spotId: String) -> TeleportSpot? {
+        TeleportCatalogue.shared.spots.first { $0.id == spotId }
     }
 
     private var guidanceIntervalMilliseconds: Int {
@@ -447,8 +469,8 @@ struct SettingsView: View {
                         .padding(.horizontal, 4)
                 }
 
-                // MARK: Scan Teleports
-                ThemedSection(header: "Scan Teleports") {
+                // MARK: Excluded Teleports
+                ThemedSection(header: "Excluded Teleports") {
                     if disabledScanTeleports.isEmpty {
                         Text("No teleports excluded.")
                             .font(.body)
@@ -498,6 +520,108 @@ struct SettingsView: View {
                     }
                 } footer: {
                     Text("Teleports excluded here won't appear as suggested scan positions. Use \"I don't have this teleport\" in the scan overlay to add entries, or remove them here to re-enable.")
+                        .font(.caption)
+                        .foregroundStyle(OverlayTheme.textSecondary)
+                        .padding(.horizontal, 4)
+                }
+
+                // MARK: Teleport Keybinds
+                ThemedSection(header: "Teleport Keybinds") {
+                    let hasAny = !groupSteps.isEmpty || !spotSteps.isEmpty
+                    if !hasAny {
+                        Text("No custom keybinds set.")
+                            .font(.body)
+                            .foregroundStyle(OverlayTheme.textSecondary)
+                    } else {
+                        // Build a unified list of entries sorted by display name.
+                        // Group-level entries: keyed by groupId, primary label = groupName.
+                        // Spot-level entries: keyed by spot.id, primary label = spot.name.
+                        let groupEntries: [(key: String, primary: String, secondary: String)] =
+                            groupSteps.keys.compactMap { gid in
+                                guard let spot = spotForGroupId(gid) else { return nil }
+                                return (key: gid, primary: spot.groupName, secondary: "All teleports")
+                            }
+                        let spotEntries: [(key: String, primary: String, secondary: String)] =
+                            spotSteps.keys.compactMap { sid in
+                                guard let spot = spotForSpotId(sid) else { return nil }
+                                return (key: sid, primary: spot.name, secondary: spot.groupName)
+                            }
+                        let allEntries = (groupEntries + spotEntries)
+                            .sorted { $0.primary.localizedCaseInsensitiveCompare($1.primary) == .orderedAscending }
+
+                        ForEach(Array(allEntries.enumerated()), id: \.element.key) { idx, entry in
+                            let isSpot = spotSteps[entry.key] != nil
+                            let steps  = isSpot ? (spotSteps[entry.key] ?? []) : (groupSteps[entry.key] ?? [])
+                            let spot   = isSpot ? spotForSpotId(entry.key) : spotForGroupId(entry.key)
+
+                            VStack(spacing: 0) {
+                                if idx != 0 { ThemedDivider() }
+                                HStack(spacing: 10) {
+                                    if let iconName = spot?.resolvedIcon,
+                                       let cg = TeleportSpriteCache.shared.image(named: iconName) {
+                                        Image(nsImage: NSImage(cgImage: cg, size: NSSize(width: 18, height: 18)))
+                                            .frame(width: 18, height: 18)
+                                    } else {
+                                        Image(systemName: "keyboard")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                            .frame(width: 18, height: 18)
+                                    }
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(entry.primary)
+                                            .font(.body)
+                                        Text(entry.secondary)
+                                            .font(.caption)
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                        if !steps.isEmpty {
+                                            Text(steps.joined(separator: " > "))
+                                                .font(.caption)
+                                                .foregroundStyle(OverlayTheme.gold.opacity(0.8))
+                                                .fontDesign(.monospaced)
+                                        }
+                                    }
+
+                                    Spacer()
+
+                                    Button {
+                                        keybindEditTarget = KeybindEditTarget(
+                                            scopeId:     entry.key,
+                                            scopeName:   entry.primary,
+                                            contextLine: isSpot
+                                                ? "\(entry.primary) · \(entry.secondary)"
+                                                : "Applies to all \(entry.primary) teleports",
+                                            knownCode:   spot?.code,
+                                            isSpotLevel: isSpot
+                                        )
+                                    } label: {
+                                        Image(systemName: "pencil")
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Edit keybind for \(entry.primary)")
+
+                                    Button {
+                                        if isSpot {
+                                            AppSettings.removeSpotSteps(forSpotId: entry.key)
+                                        } else {
+                                            AppSettings.removeGroupSteps(forGroupId: entry.key)
+                                        }
+                                        refreshGroupSteps()
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundStyle(OverlayTheme.textSecondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Remove keybind for \(entry.primary)")
+                                    .accessibilityHint("Removes the custom keybind pre-steps for this teleport.")
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+                } footer: {
+                    Text("Custom keybind steps are shown before the in-game shortcut when a teleport is suggested. Add them using the \"Add keybind\" button in the scan or compass overlays.")
                         .font(.caption)
                         .foregroundStyle(OverlayTheme.textSecondary)
                         .padding(.horizontal, 4)
@@ -582,9 +706,22 @@ struct SettingsView: View {
         .background(OverlayTheme.bgPrimary)
         .foregroundStyle(OverlayTheme.textPrimary)
         .navigationTitle("Opt1 Settings")
-        .onAppear { refreshDisabledScanTeleports() }
+        .onAppear {
+            refreshDisabledScanTeleports()
+            refreshGroupSteps()
+        }
         .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
             refreshDisabledScanTeleports()
+            refreshGroupSteps()
+        }
+        .sheet(item: $keybindEditTarget, onDismiss: refreshGroupSteps) { target in
+            TeleportInstructionSheet(
+                scopeId:     target.scopeId,
+                scopeName:   target.scopeName,
+                contextLine: target.contextLine,
+                knownCode:   target.knownCode,
+                isSpotLevel: target.isSpotLevel
+            )
         }
     }
 }
@@ -652,4 +789,16 @@ private struct ThemedDivider: View {
             .frame(maxWidth: .infinity, minHeight: 0.5, maxHeight: 0.5)
             .padding(.vertical, 8)
     }
+}
+
+// MARK: - KeybindEditTarget
+
+/// Identifiable wrapper used to drive the keybind edit sheet from SettingsView.
+private struct KeybindEditTarget: Identifiable {
+    let scopeId:     String
+    let scopeName:   String
+    let contextLine: String
+    let knownCode:   String?
+    let isSpotLevel: Bool
+    var id: String { scopeId }
 }

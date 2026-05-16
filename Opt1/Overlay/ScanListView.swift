@@ -290,11 +290,29 @@ struct ScanListView: View {
 // MARK: - Teleport recommendation row
 
 /// Compact row shown in the scan overlay when the next suggested position is a
-/// known teleport destination. Displays the teleport sprite, name, and group,
-/// and provides a button to exclude the teleport from future recommendations.
+/// known teleport destination. Displays the teleport sprite, name, group, and
+/// any custom keybind sequence. Provides buttons to exclude the teleport and
+/// to edit its custom keybind pre-steps.
 private struct ScanTeleportNextRow: View {
     let teleport: TeleportSpot
     let onDisable: () -> Void
+
+    @State private var showingKeybindSheet = false
+    @State private var customSteps: [String] = []
+
+    private var isSpotLevel: Bool { AppSettings.perSpotKeybindGroups.contains(teleport.groupId) }
+
+    private var keybindText: String? {
+        keybindSequence(steps: customSteps, code: teleport.code)
+    }
+
+    private var sheetScopeId:     String { isSpotLevel ? teleport.id        : teleport.groupId   }
+    private var sheetScopeName:   String { isSpotLevel ? teleport.name      : teleport.groupName }
+    private var sheetContextLine: String {
+        isSpotLevel
+            ? "\(teleport.name) · \(teleport.groupName)"
+            : "Applies to all \(teleport.groupName) teleports"
+    }
 
     var body: some View {
         HStack(spacing: 8) {
@@ -324,9 +342,31 @@ private struct ScanTeleportNextRow: View {
                     .foregroundColor(OverlayTheme.textSecondary)
                     .lineLimit(1)
                     .truncationMode(.tail)
+                if let seq = keybindText {
+                    Text(seq)
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundColor(OverlayTheme.gold.opacity(0.75))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
             }
 
             Spacer(minLength: 4)
+
+            Button {
+                showingKeybindSheet = true
+            } label: {
+                Text(customSteps.isEmpty ? "Add keybind" : "Edit keybind")
+                    .font(.system(size: 8))
+                    .foregroundColor(OverlayTheme.gold.opacity(0.7))
+                    .padding(.horizontal, 6).padding(.vertical, 2)
+                    .background(Capsule().fill(OverlayTheme.gold.opacity(0.08)))
+                    .overlay(Capsule().strokeBorder(OverlayTheme.gold.opacity(0.2), lineWidth: 0.5))
+            }
+            .buttonStyle(.plain)
+            .help(isSpotLevel
+                ? "Set custom keybind pre-steps for \(teleport.name)."
+                : "Set custom keybind pre-steps for all \(teleport.groupName) teleports.")
 
             Button(action: onDisable) {
                 Text("I don't have this")
@@ -342,5 +382,22 @@ private struct ScanTeleportNextRow: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
         .background(OverlayTheme.gold.opacity(0.06))
+        .onAppear { refreshSteps() }
+        .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+            refreshSteps()
+        }
+        .sheet(isPresented: $showingKeybindSheet, onDismiss: refreshSteps) {
+            TeleportInstructionSheet(
+                scopeId:     sheetScopeId,
+                scopeName:   sheetScopeName,
+                contextLine: sheetContextLine,
+                knownCode:   teleport.code,
+                isSpotLevel: isSpotLevel
+            )
+        }
+    }
+
+    private func refreshSteps() {
+        customSteps = AppSettings.resolvedSteps(for: teleport)
     }
 }
