@@ -244,7 +244,7 @@ jobs:
             echo "No appcast changes to commit (re-run on same version?)."
           else
             git commit -m "Release v${{ steps.version.outputs.version }}"
-            git push origin main
+            git push origin HEAD:main
           fi
 
       - name: Create GitHub Release
