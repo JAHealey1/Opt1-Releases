@@ -30,7 +30,7 @@ struct HotkeyBinding: Equatable {
 
     // MARK: Key-code → display name
 
-    private static func keyName(for code: UInt16) -> String {
+    static func keyName(for code: UInt16) -> String {
         switch code {
         // Number row
         case 18: return "1"
@@ -163,7 +163,28 @@ final class AppSettings {
         // Teleport IDs the user has opted out of seeing as scan recommendations.
         // Stored as a [String] array; each entry is TeleportSpot.id ("<groupId>.<spotId>").
         static let disabledScanTeleportIds = "disabledScanTeleportIds"
+        // Per-group custom keybind pre-steps. Keyed by TeleportSpot.groupId; value is
+        // an ordered [String] of display-label steps (e.g. ["P", "⌥5"]).  The known
+        // in-game `code` from teleports.json is appended at display time and never stored.
+        // UserDefaults persists [String: [String]] natively as a plist dictionary.
+        static let teleportGroupSteps = "teleportGroupSteps"
+        // Per-spot custom keybind pre-steps for groups where each destination has its
+        // own individual in-game keybind (spellbooks, house teleports, etc.).
+        // Keyed by TeleportSpot.id ("<groupId>.<spotId>").
+        static let teleportSpotSteps  = "teleportSpotSteps"
     }
+
+    // MARK: - Per-spot keybind groups
+
+    /// Groups where each teleport destination has its own in-game keybind and
+    /// therefore needs a per-spot instruction rather than a shared group instruction.
+    static let perSpotKeybindGroups: Set<String> = [
+        "ancientspellook",
+        "greenteleport",
+        "houseteleports",
+        "lunarspellbook",
+        "normalspellbook",
+    ]
 
     // MARK: - Debug mode
 
@@ -470,6 +491,75 @@ final class AppSettings {
         var ids = disabledScanTeleportIds
         ids.remove(id)
         disabledScanTeleportIds = ids
+    }
+
+    // MARK: - Teleport group keybind steps
+
+    /// Custom keybind pre-steps keyed by TeleportSpot.groupId.
+    /// Each value is an ordered array of display-label strings (e.g. ["P", "⌥5"]).
+    /// The known in-game `code` from teleports.json is appended at display time
+    /// and is never stored here.
+    static var teleportGroupSteps: [String: [String]] {
+        get { (UserDefaults.standard.object(forKey: Keys.teleportGroupSteps) as? [String: [String]]) ?? [:] }
+        set { UserDefaults.standard.set(newValue, forKey: Keys.teleportGroupSteps) }
+    }
+
+    /// Saves an ordered list of keybind step labels for a teleport group.
+    /// Passing an empty array removes the entry entirely.
+    static func setGroupSteps(_ steps: [String], forGroupId groupId: String) {
+        var map = teleportGroupSteps
+        if steps.isEmpty {
+            map.removeValue(forKey: groupId)
+        } else {
+            map[groupId] = steps
+        }
+        teleportGroupSteps = map
+    }
+
+    /// Removes the custom keybind steps for a teleport group.
+    static func removeGroupSteps(forGroupId groupId: String) {
+        var map = teleportGroupSteps
+        map.removeValue(forKey: groupId)
+        teleportGroupSteps = map
+    }
+
+    // MARK: - Per-spot keybind steps
+
+    /// Custom keybind pre-steps keyed by TeleportSpot.id ("<groupId>.<spotId>").
+    /// Used for groups listed in `perSpotKeybindGroups` where each destination
+    /// has its own individual in-game keybind.
+    static var teleportSpotSteps: [String: [String]] {
+        get { (UserDefaults.standard.object(forKey: Keys.teleportSpotSteps) as? [String: [String]]) ?? [:] }
+        set { UserDefaults.standard.set(newValue, forKey: Keys.teleportSpotSteps) }
+    }
+
+    /// Saves an ordered list of keybind step labels for an individual teleport spot.
+    /// Passing an empty array removes the entry entirely.
+    static func setSpotSteps(_ steps: [String], forSpotId spotId: String) {
+        var map = teleportSpotSteps
+        if steps.isEmpty {
+            map.removeValue(forKey: spotId)
+        } else {
+            map[spotId] = steps
+        }
+        teleportSpotSteps = map
+    }
+
+    /// Removes the custom keybind steps for an individual teleport spot.
+    static func removeSpotSteps(forSpotId spotId: String) {
+        var map = teleportSpotSteps
+        map.removeValue(forKey: spotId)
+        teleportSpotSteps = map
+    }
+
+    /// Returns the correct custom pre-steps for a teleport spot, choosing
+    /// per-spot storage for spellbook-style groups and per-group storage for all others.
+    static func resolvedSteps(for spot: TeleportSpot) -> [String] {
+        if perSpotKeybindGroups.contains(spot.groupId) {
+            return teleportSpotSteps[spot.id] ?? []
+        } else {
+            return teleportGroupSteps[spot.groupId] ?? []
+        }
     }
 
     // MARK: - World-map overlays

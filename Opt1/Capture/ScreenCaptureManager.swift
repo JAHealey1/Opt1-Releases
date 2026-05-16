@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import CoreMedia
 import ScreenCaptureKit
@@ -41,7 +42,16 @@ class ScreenCaptureManager {
             throw CaptureError.noDisplay
         }
 
+        let colorProfile: String
+        if let screen = NSScreen.screens.first(where: {
+            ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID) == display.displayID
+        }) {
+            colorProfile = screen.colorSpace?.localizedName ?? "unknown"
+        } else {
+            colorProfile = "unavailable"
+        }
         print("[Opt1] Capturing display \(display.width)×\(display.height) px" +
+              " colour profile: \(colorProfile)" +
               " (window '\(window.title ?? "?")')")
 
         let config = SCStreamConfiguration()

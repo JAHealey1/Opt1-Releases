@@ -300,22 +300,66 @@ struct ClueScrollPipeline {
         let region = spots.first!.location ?? "Unknown region"
 
         // Prefer the in-game displayed range (which already reflects meerkats and
-        // other active bonuses) over the corpus base range.
+        // other active bonuses) over the known base range. However, if OCR returns
+        // a value that doesn't match known or known+5 (meerkats), assume OCR is
+        // wrong and fall back to the known value from the database.
         // The reminder line reads: "The scan range of this orb is X paces."
         // Vision splits this across two observations, so we join before matching.
         let ocrRange = Self.extractOCRScanRange(from: observations)
+        let knownRange: Int? = spots.first?.scanRange
 
-        let corpusRange: String
-        if let clueText = spots.first?.clue.lowercased(),
-           let start = clueText.range(of: "orb scan range:") {
-            let after = String(clueText[start.upperBound...]).trimmingCharacters(in: .whitespaces)
-            corpusRange = String(after.prefix(while: { $0.isNumber }))
-        } else {
-            corpusRange = ""
+        let scanRange = Self.reconcileScanRange(ocrRange: ocrRange, knownRange: knownRange)
+
+        return (spots, region, scanRange)
+    }
+
+    // MARK: - Scan range reconciliation
+
+    /// Combines OCR with the database `scanRange` (base paces). The only in-game
+    /// variant we model is meerkats (+5). Trusts OCR when it matches base or
+    /// base+5; when it disagrees, prefers the catalogue value whose *decimal
+    /// digits* are within one Levenshtein edit — e.g. OCR `25` vs true `35`
+    /// (30+5) would otherwise fall back to bare `30` and drop the buff.
+    static func reconcileScanRange(ocrRange: String?, knownRange: Int?) -> String {
+        guard let known = knownRange else {
+            return ocrRange ?? ""
         }
 
-        let scanRange = ocrRange ?? corpusRange
-        return (spots, region, scanRange)
+        let buffed = known + 5
+        let candidates: [Int] = (known == buffed) ? [known] : [known, buffed]
+
+        guard let ocr = ocrRange, let ocrInt = Int(ocr) else {
+            return ocrRange ?? String(known)
+        }
+
+        if candidates.contains(ocrInt) {
+            return ocr
+        }
+
+        let ocrDigits = String(ocrInt)
+        var best: Int?
+        var bestDistance = Int.max
+        for c in candidates {
+            let d = LevenshteinDistance.unicodeScalars(ocrDigits, String(c))
+            if d < bestDistance {
+                bestDistance = d
+                best = c
+            } else if d == bestDistance, let b = best {
+                if abs(c - ocrInt) < abs(b - ocrInt) {
+                    best = c
+                }
+            }
+        }
+
+        if bestDistance <= 1, let pick = best {
+            if pick != ocrInt {
+                print("[Opt1] Scan — OCR range \(ocrInt) reconciled to \(pick) (≤1 digit edit from base \(known) or +meerkats)")
+            }
+            return String(pick)
+        }
+
+        print("[Opt1] Scan — OCR range \(ocrInt) differs from known \(known); using known value")
+        return String(known)
     }
 
     /// Extracts the effective scan range from OCR observations by matching

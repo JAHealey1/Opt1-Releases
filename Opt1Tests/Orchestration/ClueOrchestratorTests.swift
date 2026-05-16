@@ -95,6 +95,72 @@ struct ClueOrchestratorTests {
         #expect(!ClueScrollPipeline.containsScanPhrase(observations))
     }
 
+    // MARK: - ClueScrollPipeline.extractOCRScanRange
+
+    @Test("extractOCRScanRange extracts digits from 'is N paces' pattern", arguments: [
+        (["The scan range of this orb is 22 paces."], "22"),
+        (["is 11 paces"],                             "11"),
+        (["IS 49 PACES"],                             "49"),
+    ] as [([String], String)])
+    func extractOCRScanRangeFindsValue(observations: [String], expectedRange: String) {
+        let result = ClueScrollPipeline.extractOCRScanRange(from: observations)
+        #expect(result == expectedRange)
+    }
+
+    @Test("extractOCRScanRange joins split Vision observations to find range")
+    func extractOCRScanRangeHandlesVisionSplit() {
+        // Vision often splits "The scan range of this orb is" and "49 paces." across lines
+        let observations = ["The scan range of this orb is", "49 paces."]
+        let result = ClueScrollPipeline.extractOCRScanRange(from: observations)
+        #expect(result == "49")
+    }
+
+    @Test("extractOCRScanRange returns nil when no 'is N paces' pattern present", arguments: [
+        ["This scroll will work within the walls of Varrock."],
+        ["Orb scan range: 22 paces."],  // corpus clue format, not the in-game reminder
+        ["orb scan range: 14"],
+        [],
+    ] as [[String]])
+    func extractOCRScanRangeReturnsNilWhenAbsent(observations: [String]) {
+        let result = ClueScrollPipeline.extractOCRScanRange(from: observations)
+        #expect(result == nil)
+    }
+
+    // MARK: - ClueScrollPipeline.reconcileScanRange
+
+    @Test("reconcileScanRange trusts OCR when it matches base or base+meerkats")
+    func reconcileAcceptsExactMatches() {
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "30", knownRange: 30) == "30")
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "35", knownRange: 30) == "35")
+    }
+
+    @Test("reconcileScanRange picks meerkats value when OCR is one digit-edit away (e.g. 25 vs 35)")
+    func reconcileSingleDigitErrorPrefersBuffedWhenCloserInEdits() {
+        // Menaphos base 30 / meerkats 35; Vision misreads tens digit
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "25", knownRange: 30) == "35")
+    }
+
+    @Test("reconcileScanRange picks base when tied on edit distance but closer numerically")
+    func reconcileTieBreaksTowardNumericCloser() {
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "31", knownRange: 30) == "30")
+    }
+
+    @Test("reconcileScanRange falls back to known when OCR is far from both catalogue values")
+    func reconcileFallsBackWhenOcrIsUnreconcilable() {
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "99", knownRange: 30) == "30")
+    }
+
+    @Test("reconcileScanRange without known defers to OCR or empty")
+    func reconcileWithoutKnown() {
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: "22", knownRange: nil) == "22")
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: nil, knownRange: nil).isEmpty)
+    }
+
+    @Test("reconcileScanRange without OCR uses catalogue base")
+    func reconcileWithoutOcr() {
+        #expect(ClueScrollPipeline.reconcileScanRange(ocrRange: nil, knownRange: 30) == "30")
+    }
+
     // MARK: - SnipCoordinateMapper.normalizedSnipToImagePixels
 
     @Test("Normalised rect (0,0,1,1) maps to full image rect")
